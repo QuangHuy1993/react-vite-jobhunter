@@ -22,7 +22,6 @@ import ManageAccount from './modal/manage.account';
 import SearchClient from "components/client/search.client";
 import logoImage from '../../assets/Logooo.png';
 import { IBackendRes, IModelPaginate, ISkill } from "@/types/backend";
-import type { MenuItemType } from 'antd/es/menu/hooks/useItems';
 
 interface HeaderProps {
     searchTerm: string;
@@ -184,7 +183,7 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
             key: 'admin',
             icon: <FireOutlined />
         }] : []),
-        ...(user?.role?.name === 'HR' ? [{
+        ...(user?.role?.name === 'HR' || user?.role?.name === 'SUPER_ADMIN' ? [{
             label: <Link to="/donate">Mua VIP</Link>,
             key: 'donate',
             icon: <CrownOutlined />

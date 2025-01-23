@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import NotFound from 'components/share/not.found';
-import Loading from 'components/share/loading';
 import LoginPage from 'pages/auth/login';
 import RegisterPage from 'pages/auth/register';
 import LayoutAdmin from 'components/admin/layout.admin';
@@ -36,6 +35,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import DonatePage from "pages/home/donate";
 import PostLimitPage from "pages/admin/post-limit";
+import PaymentPage from "pages/admin/payment";
 
 
 const LayoutClient = () => {
@@ -179,6 +179,19 @@ export default function App() {
             <ProtectedRoute>
               <RolePage />
             </ProtectedRoute>
+        },
+        {
+          path: "/admin/payment",
+          children: [
+            {
+              path: "stats",
+              // element: <PaymentStatsPage />
+            },
+            {
+              path: "list",
+              element: <PaymentPage />
+            }
+          ]
         }
       ],
     },

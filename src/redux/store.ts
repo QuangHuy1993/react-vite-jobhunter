@@ -12,6 +12,7 @@ import permissionReducer from './slice/permissionSlide';
 import roleReducer from './slice/roleSlide';
 import skillReducer from './slice/skillSlide';
 import postlimitReducer from "@/redux/slice/postlimitReducer";
+import paymentReducer from "@/redux/slice/paymentSlide";
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ export const store = configureStore({
     role: roleReducer,
     skill: skillReducer,
     postLimit: postlimitReducer,
+    payment: paymentReducer,
   },
 });
 

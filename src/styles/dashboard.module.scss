@@ -79,6 +79,67 @@
   }
 }
 
+.recent-orders-table {
+  :global {
+    // Custom scrollbar
+    .ant-table-body {
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #f0f0f0;
+        border-radius: 3px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #d9d9d9;
+        border-radius: 3px;
+
+        &:hover {
+          background: #bfbfbf;
+        }
+      }
+    }
+
+    // Table header
+    .ant-table-thead > tr > th {
+      background: #fafafa;
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 16px;
+
+      &::before {
+        display: none; // Ẩn border mặc định
+      }
+    }
+
+    // Table rows
+    .ant-table-tbody > tr > td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    // Hover effect
+    .ant-table-tbody > tr:hover > td {
+      background: #f5f5f5;
+    }
+
+    // Pagination
+    .ant-pagination {
+      margin: 16px 0;
+
+      .ant-pagination-item-active {
+        border-color: #1890ff;
+
+        a {
+          color: #1890ff;
+        }
+      }
+    }
+  }
+}
+
 // Responsive
 @media (max-width: 992px) {
   .info-section {

@@ -13,7 +13,7 @@ import {
     ISubscribers,
     IPaymentRequest,
     ISubscription,
-    IPostLimit
+    IPostLimit, IPaymentData
 } from '@/types/backend';
 import axios from 'config/axios-customize';
 
@@ -373,10 +373,29 @@ export const callUpdatePostLimit = (id: number, postLimit: IPostLimit) => {
 
 
 
-
+/**
+ *
+ * Module Payment
+ * */
 export const callCreatePayment = (data: IPaymentRequest) => {
     return axios.post('/api/v1/payments/create-url', data);
 };
+
+
+export const callGetPaymentSuccess = () => {
+    return axios.get<IBackendRes<IPaymentData>>('/api/v1/payments/success');
+};
+
+export const callGetAllPayments = (query: string) => {
+    return axios.get<IBackendRes<IPaymentData>>(`/api/v1/payments?${query}`);
+};
+
+export const callUpdatePaymentStatus = (id: number, status: string) => {
+    return axios.put<IBackendRes<IPaymentData>>(`/api/v1/payments/update/${id}`, { status });
+};
+
+
+
 ``
 /**
  *

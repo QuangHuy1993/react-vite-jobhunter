@@ -1,45 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-
-interface OrderData {
-    id_payment: string;
-    total: number;
-    created_at: string;
-}
+import { callGetPaymentSuccess } from '@/config/api';
+import type { IPayment } from '@/types/backend';
+import styles from '@/styles/dashboard.module.scss';
 
 const RecentOrdersCard: React.FC = () => {
-    const data: OrderData[] = [
-        {
-            id_payment: 'PAY001',
-            total: 1500000,
-            created_at: '2024-01-23 10:30:00'
-        },
-        {
-            id_payment: 'PAY002',
-            total: 2300000,
-            created_at: '2024-01-23 11:45:00'
-        },
-        {
-            id_payment: 'PAY003',
-            total: 3450000,
-            created_at: '2024-01-23 13:15:00'
-        },
-    ];
+    const [payments, setPayments] = useState<IPayment[]>([]);
 
-    const columns: ColumnsType<OrderData> = [
+    useEffect(() => {
+        const fetchPayments = async () => {
+            try {
+                const res = await callGetPaymentSuccess();
+                if (res?.data?.data) {
+                    // Only keep the most recent 50 orders
+                    const recentPayments = res.data.data.slice(0, 50);
+                    setPayments(recentPayments);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+        fetchPayments();
+    }, []);
+
+    const columns: ColumnsType<IPayment> = [
         {
             title: 'ID Thanh Toán',
-            dataIndex: 'id_payment',
-            key: 'id_payment',
+            dataIndex: 'paymentRef',
+            key: 'paymentRef',
             render: (text) => (
                 <span style={{ fontWeight: 500, color: '#262626' }}>{text}</span>
             )
         },
         {
             title: 'Tổng tiền',
-            dataIndex: 'total',
-            key: 'total',
+            dataIndex: 'totalPrice',
+            key: 'totalPrice',
             render: (amount) => (
                 <span style={{ color: '#52c41a', fontWeight: 600 }}>
                     {new Intl.NumberFormat('vi-VN', {
@@ -51,8 +48,8 @@ const RecentOrdersCard: React.FC = () => {
         },
         {
             title: 'Thời gian',
-            dataIndex: 'created_at',
-            key: 'created_at',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
             render: (text) => (
                 <span style={{ color: '#8c8c8c' }}>
                     {new Date(text).toLocaleString('vi-VN')}
@@ -63,16 +60,31 @@ const RecentOrdersCard: React.FC = () => {
 
     return (
         <Card
-            title="Đơn hàng mới"
+            title={<div style={{ textAlign: 'center', fontSize: '16px', fontWeight: 500 }}>Đơn hàng mới</div>}
             bordered={false}
-            style={{ height: '100%' }}
-            bodyStyle={{ padding: '0 24px' }}
+            className={styles['orders-card']}
+            bodyStyle={{
+                padding: '0 24px',
+                height: 'calc(100% - 58px)',
+                overflow: 'auto'
+            }}
+            headStyle={{
+                borderBottom: '1px solid #f0f0f0',
+                padding: '16px 24px'
+            }}
         >
             <Table
                 columns={columns}
-                dataSource={data}
-                pagination={false}
+                dataSource={payments}
+                pagination={{
+                    pageSize: 5,
+                    position: ['bottomCenter'],
+                    size: 'small',
+                    showSizeChanger: false
+                }}
                 size="middle"
+                rowKey="id"
+                scroll={{ y: 'calc(100vh - 450px)' }}
             />
         </Card>
     );

@@ -21,7 +21,7 @@ import type { MenuProps } from 'antd';
 import { setLogoutAction } from '@/redux/slice/accountSlide';
 import { ALL_PERMISSIONS } from '@/config/permissions';
 import {TableChartOutlined} from "@mui/icons-material";
-
+import styles from '@/styles/admin.module.scss';
 
 const { Content, Sider } = Layout;
 
@@ -77,6 +77,11 @@ const LayoutAdmin = () => {
                 && item.method === ALL_PERMISSIONS.POST_LIMITS.GET_PAGINATE.method
             )
 
+            const viewPayment = permissions?.find(item =>
+                item.apiPath === ALL_PERMISSIONS.PAYMENTS.GET_PAGINATE.apiPath
+                && item.method === ALL_PERMISSIONS.PAYMENTS.GET_PAGINATE.method
+            )
+
             const full = [
                 {
                     label: <Link to='/admin'>Dashboard</Link>,
@@ -98,6 +103,21 @@ const LayoutAdmin = () => {
                     label: <Link to='/admin/post-limit'>Giới hạn bài đăng</Link>,
                     key: '/admin/post-limit',
                     icon: <TableChartOutlined />
+                }] : []),
+                ...(viewPayment || ACL_ENABLE === 'false' ? [{
+                    label: 'Quản lý doanh thu',
+                    key: '/admin/payment',
+                    icon: <TableChartOutlined />,
+                    children: [
+                        {
+                            label: <Link to='/admin/payment/stats'>Thống kê doanh thu</Link>,
+                            key: '/admin/payment/stats'
+                        },
+                        {
+                            label: <Link to='/admin/payment/list'>Danh sách giao dịch</Link>,
+                            key: '/admin/payment/list'
+                        }
+                    ]
                 }] : []),
                 ...(viewJob || ACL_ENABLE === 'false' ? [{
                     label: <Link to='/admin/job'>Công việc</Link>,
@@ -167,69 +187,57 @@ const LayoutAdmin = () => {
     ];
 
     return (
-        <>
-            <Layout
-                style={{ minHeight: '100vh' }}
-                className="layout-admin"
-            >
-                {!isMobile ?
-                    <Sider
-                        theme='light'
-                        collapsible
-                        collapsed={collapsed}
-                        onCollapse={(value) => setCollapsed(value)}>
-                        <div style={{ height: 32, margin: 16, textAlign: 'center' }}>
-                            <BugOutlined />  ADMIN
-                        </div>
-                        <Menu
-                            selectedKeys={[activeMenu]}
-                            mode="inline"
-                            items={menuItems}
-                            onClick={(e) => setActiveMenu(e.key)}
-                        />
-                    </Sider>
-                    :
+        <Layout className={styles['admin-layout']} style={{ minHeight: '100vh' }}>
+            {!isMobile ? (
+                <Sider
+                    theme='light'
+                    collapsible
+                    collapsed={collapsed}
+                    onCollapse={setCollapsed}
+                    className={styles['admin-sider']}
+                >
+                    <div className={styles['admin-logo']}>
+                        <BugOutlined /> ADMIN
+                    </div>
                     <Menu
                         selectedKeys={[activeMenu]}
+                        mode="inline"
                         items={menuItems}
                         onClick={(e) => setActiveMenu(e.key)}
-                        mode="horizontal"
+                        className={styles['menu-item']}
                     />
-                }
+                </Sider>
+            ) : (
+                <Menu
+                    selectedKeys={[activeMenu]}
+                    items={menuItems}
+                    onClick={(e) => setActiveMenu(e.key)}
+                    mode="horizontal"
+                />
+            )}
 
-                <Layout>
-                    {!isMobile &&
-                        <div className='admin-header' style={{ display: "flex", justifyContent: "space-between", marginRight: 20 }}>
-                            <Button
-                                type="text"
-                                icon={collapsed ? React.createElement(MenuUnfoldOutlined) : React.createElement(MenuFoldOutlined)}
-                                onClick={() => setCollapsed(!collapsed)}
-                                style={{
-                                    fontSize: '16px',
-                                    width: 64,
-                                    height: 64,
-                                }}
-                            />
-
-                            <Dropdown menu={{ items: itemsDropdown }} trigger={['click']}>
-                                <Space style={{ cursor: "pointer" }}>
-                                    Welcome {user?.name}
-                                    <Avatar> {user?.name?.substring(0, 2)?.toUpperCase()} </Avatar>
-
-                                </Space>
-                            </Dropdown>
-                        </div>
-                    }
-                    <Content style={{ padding: '15px' }}>
-                        <Outlet />
-                    </Content>
-                    {/* <Footer style={{ padding: 10, textAlign: 'center' }}>
-                        React Typescript series Nest.JS &copy; Hỏi Dân IT - Made with <HeartTwoTone />
-                    </Footer> */}
-                </Layout>
+            <Layout>
+                {!isMobile && (
+                    <div className={styles['admin-header']}>
+                        <Button
+                            type="text"
+                            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                            onClick={() => setCollapsed(!collapsed)}
+                            className={styles['collapse-btn']}
+                        />
+                        <Dropdown menu={{ items: itemsDropdown }} trigger={['click']}>
+                            <Space className={styles['user-info']}>
+                                Welcome {user?.name}
+                                <Avatar>{user?.name?.substring(0, 2)?.toUpperCase()}</Avatar>
+                            </Space>
+                        </Dropdown>
+                    </div>
+                )}
+                <Content className={styles['content']}>
+                    <Outlet />
+                </Content>
             </Layout>
-
-        </>
+        </Layout>
     );
 };
 

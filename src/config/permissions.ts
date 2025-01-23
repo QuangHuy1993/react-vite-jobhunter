@@ -41,6 +41,12 @@ export const ALL_PERMISSIONS = {
         UPDATE: { method: "PUT", apiPath: '/api/v1/post-limits/{id}', module: "POST_LIMITS" },
         DELETE: { method: "DELETE", apiPath: '/api/v1/post-limits/{id}', module: "POST_LIMITS" },
     },
+    PAYMENTS:{
+        GET_PAGINATE: { method: "GET", apiPath: '/api/v1/payments/success', module: "PAYMENTS" },
+        CREATE: { method: "POST", apiPath: '/api/v1/payments', module: "PAYMENTS" },
+        UPDATE: { method: "PUT", apiPath: '/api/v1/payments/update/${id}', module: "PAYMENTS" },
+        DELETE: { method: "DELETE", apiPath: '/api/v1/payments/{id}', module: "PAYMENTS" },
+    }
 }
 
 export const ALL_MODULES = {
@@ -53,4 +59,5 @@ export const ALL_MODULES = {
     USERS: 'USERS',
     SUBSCRIBERS: 'SUBSCRIBERS',
     POST_LIMITS: 'POST_LIMITS',
+    PAYMENTS: 'PAYMENTS'
 }

@@ -197,6 +197,28 @@ export interface IPaymentRequest  {
     months: number;
 }
 
+export interface IPayment {
+    id: number;
+    paymentRef: string;
+    totalPrice: number;
+    transferContent: string;
+    createdAt: string;
+    updatedAt: string;
+    paymentStatus: string;
+    paymentMethod: string;
+    user: {
+        id: number;
+        email: string;
+        name: string;
+    };
+}
+
+interface IPaymentData {
+    message: string;
+    data: IPayment[];
+    code: string;
+}
+
 // Interface cho subscription data
 export interface ISubscription {
     postLimitID: number;
