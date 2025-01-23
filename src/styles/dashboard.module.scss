@@ -1,0 +1,87 @@
+.dashboard-container {
+  padding: 24px;
+
+  .statistic-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03),
+    0 1px 6px -1px rgba(0, 0, 0, 0.02),
+    0 2px 4px 0 rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .icon-wrapper {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+
+      &.blue {
+        background: rgba(24, 144, 255, 0.1);
+        color: #1890ff;
+      }
+
+      &.green {
+        background: rgba(82, 196, 26, 0.1);
+        color: #52c41a;
+      }
+
+      &.purple {
+        background: rgba(114, 46, 209, 0.1);
+        color: #722ed1;
+      }
+
+      &.orange {
+        background: rgba(250, 173, 20, 0.1);
+        color: #faad14;
+      }
+    }
+  }
+
+  .info-section {
+    margin-top: 48px; // Tăng khoảng cách với cards phía trên
+    display: grid;
+    grid-template-columns: 1fr 1fr; // Chia đều 2 cột
+    gap: 24px;
+    margin-bottom: 24px; // Thêm khoảng cách phía dưới
+
+    .orders-card, .revenue-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+      transition: all 0.3s ease;
+      height: 100%; // Đảm bảo chiều cao bằng nhau
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .table-wrapper {
+      :global {
+        .ant-table-thead > tr > th {
+          background: #fafafa;
+          font-weight: 600;
+        }
+
+        .ant-table-tbody > tr:hover > td {
+          background: #f5f5f5;
+        }
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 992px) {
+  .info-section {
+    grid-template-columns: 1fr !important;
+  }
+}

@@ -1,0 +1,125 @@
+.upsert-job-container {
+    background-color: white;
+    padding: 10px 30px;
+    border-radius: 5px;
+    min-height: 100vh;
+    height: auto;
+
+    .title {
+        padding: 10px 0 20px 0;
+    }
+}
+
+/* Cấu trúc chính */
+.layout-admin {
+    background-color: #f5f7fa;
+}
+
+/* Sider */
+.ant-layout-sider {
+    background-color: #001529;
+    transition: all 0.3s ease;
+}
+
+.ant-layout-sider .ant-menu {
+    background-color: #001529;
+    color: #fff;
+}
+
+.ant-layout-sider .ant-menu-item {
+    margin: 0;
+    padding: 10px 20px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.ant-layout-sider .ant-menu-item:hover {
+    background-color: #1890ff;
+    color: #fff;
+}
+
+.ant-layout-sider .ant-menu-item-selected {
+    background-color: #1890ff;
+    font-weight: bold;
+    color: #fff;
+}
+
+.ant-layout-sider .ant-menu-item .anticon {
+    font-size: 16px;
+}
+
+/* Header */
+.admin-header {
+    background-color: #fff;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 0 20px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+}
+
+.admin-header .ant-btn {
+    color: #1890ff;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.admin-header .ant-btn:hover {
+    color: #fff;
+    background-color: #1890ff;
+}
+
+/* Dropdown */
+.ant-dropdown-menu {
+    background-color: #f5f7fa;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.ant-dropdown-menu-item:hover {
+    background-color: #1890ff;
+    color: #fff;
+}
+
+/* Content */
+.ant-layout-content {
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-height: 280px;
+}
+
+/* Footer */
+.ant-layout-footer {
+    text-align: center;
+    background: #001529;
+    color: #fff;
+}
+
+/* Avatar */
+.ant-avatar {
+    background-color: #1890ff;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Hover hiệu ứng */
+.ant-menu-item:hover .anticon {
+    color: #fff;
+}
+
+.ant-menu-item-selected .anticon {
+    color: #fff;
+}
+
+/* Mobile Friendly */
+@media (max-width: 768px) {
+    .ant-layout-sider {
+        display: none;
+    }
+
+    .admin-header {
+        justify-content: space-between;
+    }
+}

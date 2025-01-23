@@ -1,0 +1,225 @@
+$color-white: #ffffff;
+$color-light: #f1f5f9;
+$color-black: #121212;
+$color-night: #001632;
+$color-red: #f44336;
+$color-blue: #1a73e8;
+$color-gray: #80868b;
+$color-grayish: #dadce0;
+
+$gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+$gradient-light: linear-gradient(to right bottom,
+        #a1c4fd 0%,
+        #c2e9fb 51%,
+        #f3e7e9 100%
+);
+$gradient-red-black: linear-gradient(
+                to right bottom,
+                #ff0000 0%, // Màu đỏ
+                #8b0000 50%, // Đỏ đậm hơn (màu trung gian, tùy chỉnh nếu muốn)
+                #000000 100% // Màu đen
+);
+
+$shadow-normal: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+$shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-large: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+.login-page,
+.register-page {
+    color: $color-black;
+    background: $gradient-red-black;
+    //background: url('../assets/redblack.jpg') no-repeat center center;
+    //background-size: cover; // Đảm bảo hình ảnh phủ kín toàn bộ nền
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 80rem;
+        min-height: 100vh;
+        padding: 0 2rem;
+        margin: 0 auto;
+    }
+
+    .text {
+        font-family: inherit;
+        line-height: inherit;
+        text-transform: unset;
+        text-rendering: optimizeLegibility;
+
+        &-large {
+            font-size: 2rem;
+            font-weight: 600;
+            background: $gradient-primary;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        &-normal {
+            font-size: 1rem;
+            font-weight: 400;
+            color: $color-black;
+        }
+
+        &-links {
+            font-size: 1rem;
+            font-weight: 400;
+            color: $color-blue;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .main {
+        .wrapper {
+            max-width: 28rem;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 2rem 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 16px;
+            color: $color-black;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.17);
+            transition: all 0.3s ease;
+
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.25);
+            }
+
+            .form {
+                width: 100%;
+                height: auto;
+                margin-top: 2rem;
+
+                .input-control {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 1.25rem;
+                }
+
+                .input-field {
+                    font-family: inherit;
+                    font-size: 1rem;
+                    font-weight: 400;
+                    line-height: inherit;
+                    width: 100%;
+                    height: auto;
+                    padding: 0.75rem 1.25rem;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 8px;
+                    color: $color-black;
+                    background: $color-white;
+                    transition: all 0.3s ease;
+
+                    &:hover, &:focus {
+                        border-color: #6366f1;
+                        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+                    }
+                }
+
+                .input-submit {
+                    width: 100%;
+                    height: 45px;
+                    background: $gradient-primary;
+                    border: none;
+                    border-radius: 8px;
+                    color: $color-white;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+                    }
+                }
+            }
+
+            .social-buttons {
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+                margin: 1.5rem 0;
+            }
+
+            .social-btn {
+                transition: all 0.2s ease-in-out !important;
+                height: 45px !important;
+                border-radius: 8px !important;
+                font-weight: 500 !important;
+
+                &:hover {
+                    transform: translateY(-2px);
+                    opacity: 0.95;
+                }
+
+                &:active {
+                    transform: translateY(1px);
+                }
+
+                &[style*="background-color: #fff"] {
+                    border: 1px solid #e2e8f0 !important;
+                    &:hover {
+                        background-color: #f8fafc !important;
+                    }
+                }
+
+                &[style*="background-color: #1877f2"] {
+                    &:hover {
+                        background-color: #1666d3 !important;
+                    }
+                }
+            }
+        }
+    }
+
+    a {
+        color: #6366f1;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.2s;
+
+        &:hover {
+            color: #4f46e5;
+            text-decoration: underline;
+        }
+    }
+
+    // Ant Design specific overrides
+    :global {
+        .ant-input, .ant-input-password {
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+
+            &:hover, &:focus {
+                border-color: #6366f1;
+                box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+            }
+        }
+
+        .ant-btn-primary {
+            width: 100%;
+            height: 45px;
+            background: $gradient-primary;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+            }
+        }
+
+        .ant-divider {
+            margin: 24px 0;
+            border-top-color: #e2e8f0;
+        }
+    }
+}

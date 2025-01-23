@@ -1,0 +1,1033 @@
+
+$gradient-light: linear-gradient(to right bottom,
+        #a1c4fd 0%,
+        #c2e9fb 51%,
+        #f3e7e9 100%
+);
+
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (max-width: 768px) {
+    .search-section {
+        padding: 40px 15px;
+
+        :global {
+            .ant-form {
+                h2 {
+                    font-size: 24px;
+                    margin-bottom: 25px;
+                }
+
+                .ant-col {
+                    margin-bottom: 15px;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    .company-section {
+        .company-content {
+            .card-customize {
+                height: 140px;
+                width: 140px;
+
+                img {
+                    max-width: 120px;
+                    max-height: 120px;
+                }
+            }
+
+            .company-name {
+                font-size: 14px;
+                height: 42px;
+            }
+
+            :global(.ant-card) {
+                height: 250px;
+            }
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        width: 750px;
+    }
+}
+@media (max-width: 768px) {
+    .search-section {
+        padding: 40px 15px;
+
+        :global {
+            .ant-form {
+                h2 {
+                    font-size: 24px;
+                    margin-bottom: 25px;
+                }
+
+                .ant-col {
+                    margin-bottom: 15px;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        width: 970px;
+    }
+}
+
+@media (min-width: 1260px) {
+    .container {
+        width: 1260px;
+    }
+}
+
+@media (min-width: 767px) {
+
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-button {
+        width: 8px;
+        height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgb(255, 255, 255);
+        border: thin solid rgb(238, 238, 238);
+        box-shadow: 0px 0px 3px #dfdfdf inset;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border: thin solid #ccc;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #7d7d7d;
+    }
+
+}
+
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.header-container {
+    background-image: url('/src/assets/redblack.jpg');
+    //background: $gradient-light;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    min-height: 300px;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+                        to bottom,
+                        rgba(0, 0, 0, 0.4) 0%,
+                        rgba(0, 0, 0, 0.1) 100%
+        );
+    }
+}
+
+.header-section {
+    position: relative;
+    z-index: 2;
+    background-color: rgba(34, 40, 49, 0.1);
+    display: block;
+    width: 100%;
+    height: 45px;
+
+    .container {
+        height: 100%; // Thêm dòng này
+        display: flex; // Thêm dòng này
+        align-items: center; // Thêm dòng này
+
+        > div {
+            width: 100%; // Thêm dòng này
+        }
+    }
+
+
+    .brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%; // Thêm dòng này
+
+        img {
+            cursor: pointer;
+            width: 150px;
+            height: auto;
+        }
+    }
+    @media (max-width: 768px) {
+        .header-section {
+            height: 40px; // Giảm thêm cho mobile
+
+            .brand {
+                img {
+                    width: 90px; // Giảm kích thước logo trên mobile
+                }
+            }
+        }
+
+        .search-section {
+            padding: 30px 15px 40px;
+        }
+    }
+
+    .top-menu {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+
+        :global {
+            .ant-menu {
+                &.ant-menu-horizontal {
+                    border-bottom: none !important;
+                    background: transparent !important;
+
+                    // Style cho menu cha
+                    > .ant-menu-item,
+                    > .ant-menu-submenu {
+                        padding: 0 20px !important;
+                        margin: 0 !important;
+
+                        &::after {
+                            content: '' !important;
+                            position: absolute !important;
+                            bottom: 0 !important;
+                            left: 50% !important;
+                            width: 0 !important;
+                            height: 1px !important;
+                            background: white !important;
+                            transition: all 0.3s ease !important;
+                            transform: translateX(-50%) !important;
+                        }
+
+                        &.ant-menu-item-selected,
+                        &.ant-menu-submenu-selected {
+                            &::after {
+                                width: 80% !important;
+                            }
+                        }
+
+                        a {
+                            color: white !important;
+                            text-decoration: none !important;
+                        }
+
+                        &:hover {
+                            color: #1677ff !important;
+                            a {
+                                color: #1677ff !important;
+                            }
+                        }
+                    }
+                }
+
+                // Style cho menu con (dropdown)
+                .ant-menu-submenu-popup {
+                    .ant-menu {
+                        background: #222831 !important;
+                        padding: 4px !important;
+                        border-radius: 8px !important;
+
+                        &.ant-menu-sub {
+                            // Áp dụng grid cho submenu kỹ năng
+                            .skill-grid-container > .ant-menu {
+                                display: grid !important;
+                                grid-template-columns: repeat(3, 1fr) !important;
+                                gap: 10px !important;
+                                min-width: 500px !important;
+                                padding: 10px !important;
+                                background: transparent !important;
+
+                                // Style cho từng item trong grid
+                                .skill-item {
+                                    height: auto !important;
+                                    line-height: 1.5 !important;
+                                    margin: 0 !important;
+                                    text-align: center !important;
+                                    padding: 8px !important;
+
+                                    &:hover {
+                                        background: #1677ff !important;
+                                    }
+                                }
+                            }
+                        }
+
+                        .ant-menu-item {
+                            margin: 2px 0 !important;
+                            padding: 0 16px !important;
+                            background: transparent !important;
+                            border-radius: 4px !important;
+                            height: 40px !important;
+                            line-height: 40px !important;
+                            border: none !important;
+
+                            &::after {
+                                display: none !important;
+                            }
+
+                            a {
+                                color: white !important;
+                                text-decoration: none !important;
+                                width: 100% !important;
+                                display: block !important;
+                            }
+
+                            &:hover {
+                                background: #1677ff !important;
+                                a {
+                                    color: white !important;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .ant-modal-warning {
+                .ant-modal-content {
+                    border-top: 4px solid #faad14;
+                }
+
+                .ant-modal-title {
+                    color: #d48806;
+                    font-weight: 600;
+                    font-size: 18px;
+                }
+
+                .ant-modal-body {
+                    padding: 20px;
+                    font-size: 15px;
+                    color: #262626;
+                }
+
+                .ant-modal-footer {
+                    .ant-btn-primary {
+                        background-color: #faad14;
+                        border-color: #faad14;
+
+                        &:hover {
+                            background-color: #d48806;
+                            border-color: #d48806;
+                        }
+                    }
+                }
+            }
+
+            // Màu chữ cho menu submenu
+            .ant-menu-submenu-title {
+                color: white !important;
+                &:hover {
+                    color: #1677ff !important;
+                }
+            }
+        }
+
+
+        .extra {
+
+            a,
+            span {
+                cursor: pointer;
+                display: block;
+                color: #a7a7a7;
+                text-decoration: none;
+
+                &:hover {
+                    color: #fff;
+                }
+            }
+        }
+    }
+
+    .header-mobile {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 55px;
+        color: white;
+    }
+}
+
+.search-section {
+    position: relative;
+    z-index: 2;
+    padding: 40px 0 60px;
+    margin-top: 0;
+
+    :global {
+        .ant-form {
+            max-width: 1200px;
+            margin: 0 auto;
+
+            .ant-row {
+                justify-content: center;
+                padding: 0 15px;
+            }
+
+            h2 {
+                color: white;
+                text-align: center;
+                font-size: 32px;
+                margin-bottom: 30px;
+                font-weight: 600;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            }
+
+            .ant-select {
+                .ant-select-selector {
+                    height: 50px !important;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    background: rgba(255, 255, 255, 0.95);
+                    border: none;
+
+                    input {
+                        height: 45px !important;
+                    }
+
+                    .ant-select-selection-placeholder {
+                        line-height: 50px;
+                        color: #666;
+                    }
+
+                    .ant-select-selection-search-input {
+                        height: 48px !important;
+                    }
+                }
+            }
+
+            .ant-btn {
+                height: 45px;
+                width: 100%;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: 500;
+                background: #1677ff;
+                border: none;
+
+                &:hover {
+                    background: #4096ff;
+                }
+            }
+        }
+    }
+}
+
+.card-job-section {
+    .empty {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding: 50px;
+    }
+
+    .dflex-mobile {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dflex-pc {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .job-content {
+        .card-job-content {
+            display: flex;
+            width: 100%;
+            gap: 10px;
+
+            .card-job-left {
+                width: 70px;
+                margin: 0 auto;
+
+                img {
+                    width: 50px;
+                    height: 50px;
+                }
+            }
+
+            .card-job-right {
+                width: 100%;
+
+                .job-title {
+                    overflow: hidden;
+                    color: #353535;
+                    font-weight: 600;
+                    text-overflow: ellipsis;
+                    text-align: left;
+                    margin-bottom: 10px;
+                    line-height: 1.3;
+                    transition: .2s all;
+                    font-size: 17px;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                }
+
+                .job-location {
+                    padding-bottom: 5px;
+                }
+
+                .job-updatedAt {
+                    display: block;
+                    float: right;
+                    color: #919191;
+                }
+            }
+        }
+    }
+}
+
+.company-section {
+    .company-content {
+        padding-top: 30px; // Giảm padding-top xuống để gọn hơn
+
+        .card-customize {
+            height: 160px; // Giảm chiều cao phần logo
+            width: 160px; // Giảm chiều rộng phần logo
+            margin: 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            img {
+                max-width: 140px; // Giảm kích thước tối đa của logo
+                max-height: 140px;
+                object-fit: contain;
+            }
+        }
+
+        // Style cho tên công ty
+        .company-name {
+            font-size: 16px; // Giảm font size
+            font-weight: 500;
+            color: #2c3e50;
+            text-align: center;
+            margin: 0;
+            padding: 0 10px;
+            height: 48px; // Giới hạn chiều cao cho 2 dòng
+            display: -webkit-box;
+            -webkit-line-clamp: 2; // Giới hạn 2 dòng
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.5;
+        }
+
+        // Style cho Card
+        :global(.ant-card) {
+            height: 280px; // Giảm chiều cao card
+            transition: transform 0.2s;
+
+            &:hover {
+                transform: translateY(-3px);
+            }
+        }
+
+        :global(.ant-card-body) {
+            padding: 12px;
+        }
+
+        :global(.ant-divider) {
+            margin: 12px 0;
+        }
+    }
+}
+
+
+.home-section {
+
+    .empty {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding: 50px;
+    }
+
+    .dflex-mobile {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dflex-pc {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .title {
+        font-size: 27px;
+        font-family: "Roboto", sans-serif;
+        color: #353535;
+        line-height: 35px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+}
+
+.detail-job-section {
+    .header {
+        margin: 20px 0;
+        color: #353535;
+        font-size: 27px;
+    }
+
+    .btn-apply {
+        width: 100%;
+        cursor: pointer;
+        text-align: center;
+        color: #fff;
+        text-decoration: none;
+        -webkit-font-smoothing: antialiased;
+        font-size: 20px;
+        padding: 10px 15px;
+        border: 0;
+        border-radius: 5px;
+        background-color: #ea1e30;
+        -webkit-font-smoothing: antialiased;
+        outline: 0;
+
+        &:hover {
+            background-color: #d82727;
+        }
+    }
+
+    .salary {
+        padding: 15px 0;
+    }
+
+    .location {
+        padding-bottom: 15px;
+    }
+
+    h2 {
+        font-size: 23px;
+        color: #353535;
+        font-weight: 400;
+        margin: 25px 0 0;
+    }
+
+    ul {
+        padding-left: 2rem;
+    }
+
+    li {
+        line-height: 2em;
+    }
+
+    p {
+        color: #3a3a3a;
+        font-size: 16px;
+        line-height: 1.7em;
+        width: 100%;
+        line-height: 2em;
+    }
+
+    .company {
+        margin: 20px 0;
+        color: #353535;
+        font-size: 27px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        align-items: center;
+    }
+
+
+}
+.random-job {
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e8e8e8;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: #1677ff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .job-content {
+        .job-title {
+            font-weight: 500;
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        > div {
+            margin-bottom: 8px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+// Style cho phần donate
+.donateContainer {
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.headerSection {
+    background-color: white;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 24px;
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .headerFlex {
+        display: flex;
+        align-items: center;
+        gap: 20px; // Khoảng cách giữa nút Quay lại và breadcrumb
+    }
+
+    .backButton {
+        margin: 0; // Xóa margin bottom của button
+    }
+}
+
+.mainContent {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.titleSection {
+    text-align: center;
+    margin-bottom: 32px;
+
+    h1 {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    p {
+        color: #666;
+    }
+
+    .crownIcon {
+        color: #ffd700;
+    }
+    .silverCrownIcon {
+        color: silver;
+    }
+    .bronzeCrownIcon {
+        color: #cd7f32; // Bronze color
+    }
+}
+
+.currentPlan {
+    margin-bottom: 32px;
+    text-align: center;
+
+    h3 {
+        margin-bottom: 12px;
+    }
+}
+
+.planCard {
+    transition: all 0.3s ease;
+    text-align: center;
+    height: 100%;
+
+    &:hover {
+        transform: translateY(-5px);
+        border-color: #1677ff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+        .purchaseButton {
+            background-color: #1677ff;
+            color: white;
+        }
+    }
+
+    .planTitle {
+        text-align: center;
+        margin-bottom: 16px;
+    }
+
+    .price {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 16px 0;
+    }
+
+    .features {
+        margin: 16px 0;
+
+        p {
+            margin: 8px 0;
+        }
+
+        .checkIcon {
+            color: #52c41a;
+            margin-right: 8px;
+        }
+    }
+
+    .purchaseButton {
+        width: 100%;
+        height: 40px;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: #1677ff;
+            color: white;
+        }
+        &:disabled {
+            background-color: #f5f5f5 !important;
+            color: #d9d9d9 !important;
+            cursor: not-allowed !important;
+            border-color: #d9d9d9 !important;
+        }
+    }
+}
+
+.subscriptionInfo {
+    margin: 40px auto 20px;
+    padding: 20px;
+    border: 2px dashed #1677ff;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 600px;
+    background: #f0f5ff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    .title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1677ff;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .expiryDate {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .expirationWarning {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background-color: #fff2f0;
+            border: 1px solid #ffccc7;
+            border-radius: 6px;
+
+            .warningText {
+                color: #ff4d4f;
+                font-weight: 500;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+
+                &::before {
+                    content: "⚠️";
+                }
+            }
+        }
+
+        .planName {
+            font-size: 20px;
+            font-weight: bold;
+            color: #262626;
+        }
+
+        .expireDate {
+            font-size: 16px;
+            color: #1677ff;
+            font-weight: 500;
+        }
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+    }
+}
+
+
+.premiumCard {
+    border-color: #ffd700;
+
+    &:hover {
+        border-color: #1677ff;
+    }
+}
+
+
+.modalContent {
+    padding: 16px 8px;
+
+    .planInfo {
+        text-align: center;
+        margin-bottom: 24px;
+
+        h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #666;
+            margin: 0;
+        }
+    }
+
+    .monthSelection {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 24px 0;
+        padding: 0 16px;
+
+        span {
+            min-width: 100px;
+            color: #333;
+            font-weight: 500;
+        }
+    }
+
+    .priceBreakdown {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+        .priceRow {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            color: #333;
+
+            span:first-child {
+                color: #666;
+            }
+
+            &.discount {
+                color: #52c41a;
+                font-weight: 500;
+            }
+        }
+
+        .totalPrice {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 12px;
+            font-size: 18px;
+            font-weight: 600;
+
+            span:first-child {
+                color: #333;
+            }
+
+            span:last-child {
+                color: #1890ff;
+            }
+        }
+    }
+}
+
+
+@media (max-width: 768px) {
+    .titleSection {
+        h1 {
+            font-size: 24px;
+        }
+    }
+
+    .mainContent {
+        padding: 0 12px;
+    }
+    .subscriptionInfo {
+        margin: 30px 15px;
+        padding: 15px;
+
+        .title {
+            font-size: 16px;
+        }
+
+        .expiryDate {
+            .planName {
+                font-size: 18px;
+            }
+
+            .expireDate {
+                font-size: 14px;
+
+            }
+        }
+    }
+}
