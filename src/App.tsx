@@ -35,7 +35,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import DonatePage from "pages/home/donate";
 import PostLimitPage from "pages/admin/post-limit";
-import PaymentPage from "pages/admin/payment";
+import PaymentPage from "pages/admin/statistical/payment";
+import RevenueStatistics from "pages/admin/statistical/revenueStatistics";
 
 
 const LayoutClient = () => {
@@ -185,7 +186,7 @@ export default function App() {
           children: [
             {
               path: "stats",
-              // element: <PaymentStatsPage />
+              element: <RevenueStatistics />
             },
             {
               path: "list",

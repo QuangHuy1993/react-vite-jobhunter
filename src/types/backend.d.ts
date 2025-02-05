@@ -218,6 +218,17 @@ interface IPaymentData {
     data: IPayment[];
     code: string;
 }
+export interface IPlanSalesDTO {
+    month: number;
+    planName: string;
+    totalSales: number;
+}
+
+export interface IPlanSalesResponse {
+    code: string;
+    data: IPlanSalesDTO[];
+    message: string;
+}
 
 // Interface cho subscription data
 export interface ISubscription {

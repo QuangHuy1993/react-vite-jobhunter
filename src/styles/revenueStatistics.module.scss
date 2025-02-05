@@ -1,0 +1,107 @@
+.revenueCard {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  :global {
+    .ant-card-head {
+      min-height: 48px;
+      padding: 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .ant-card-body {
+      padding: 16px;
+    }
+
+    .ant-table-thead > tr > th {
+      background-color: #f5f5f5;
+      font-weight: 600;
+      padding: 12px 16px;
+      text-align: center;
+    }
+
+    .ant-table-tbody > tr > td {
+      padding: 12px 16px;
+      text-align: center;
+    }
+
+    .ant-table-tbody > tr > td:first-child {
+      text-align: center;
+    }
+
+    .ant-table-tbody > tr > td:last-child {
+      text-align: center;
+         color: rgb(82, 196, 26);
+
+      font-weight: 600;
+    }
+
+    .planNameColumn {
+      text-align: center !important;
+    }
+  }
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.yearSelector {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.yearSelectorIcon {
+  margin-left: 8px;
+  font-size: 12px;
+     color: rgb(82, 196, 26);
+
+}
+
+.monthSelector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+  gap: 16px;
+}
+
+.monthText {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.monthButton {
+     color: rgb(82, 196, 26);
+
+  border: 1px solid #1890ff;
+  border-radius: 4px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #e6f7ff;
+  }
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 24px;
+}
+.cardContainer {
+  height: 400px; // Đặt chiều cao cố định cho container
+  margin-bottom: 16px; // Thêm khoảng cách giữa các hàng
+}

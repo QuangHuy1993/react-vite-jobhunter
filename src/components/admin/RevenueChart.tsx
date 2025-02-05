@@ -55,7 +55,7 @@ const RevenueChart: React.FC = () => {
 
     return (
         <Card
-            title="Thống kê doanh thu theo tháng"
+            title={<div style={{ textAlign: 'center', fontSize: '16px', fontWeight: 500 }}>Thống kê doanh thu</div>}
             bordered={false}
             bodyStyle={{ padding: '0 24px 24px' }}
         >

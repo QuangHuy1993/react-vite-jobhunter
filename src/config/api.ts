@@ -13,7 +13,8 @@ import {
     ISubscribers,
     IPaymentRequest,
     ISubscription,
-    IPostLimit, IPaymentData
+    IPostLimit, IPaymentData, IPlanSalesDTO, IPlanSalesResponse,
+
 } from '@/types/backend';
 import axios from 'config/axios-customize';
 
@@ -392,6 +393,11 @@ export const callGetAllPayments = (query: string) => {
 
 export const callUpdatePaymentStatus = (id: number, status: string) => {
     return axios.put<IBackendRes<IPaymentData>>(`/api/v1/payments/update/${id}`, { status });
+};
+export const callGetPaymentPlanSales = (year: number) => {
+    return axios.get<IBackendRes<IPlanSalesResponse>>('/api/v1/payments/plansales', {
+        params: { year }
+    });
 };
 
 

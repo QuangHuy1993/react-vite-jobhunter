@@ -8,6 +8,7 @@ import styles from 'styles/auth.module.scss';
 import { useAppSelector } from '@/redux/hooks';
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -18,6 +19,20 @@ const LoginPage = () => {
     let location = useLocation();
     let params = new URLSearchParams(location.search);
     const callback = params?.get("callback");
+
+    const fadeIn = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 }
+    };
+
+    const socialButtonsVariants = {
+        hidden: { opacity: 0, x: -20 },
+        visible: {
+            opacity: 1,
+            x: 0,
+            transition: { staggerChildren: 0.1 }
+        }
+    };
 
     useEffect(() => {
         //đã login => redirect to '/'

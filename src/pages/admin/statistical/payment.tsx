@@ -1,17 +1,18 @@
-import DataTable from "@/components/client/data-table";
+import DataTable from "components/client/data-table";
+import { CopyOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { IPayment } from "@/types/backend";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { ActionType, ProColumns } from '@ant-design/pro-components';
-import { message, notification, Popconfirm, Space } from "antd";
+import { message, notification, Popconfirm, Space, Tooltip  } from "antd";
 import React, { useState, useRef, useEffect } from 'react';
 import dayjs from 'dayjs';
-import Access from "@/components/share/access";
-import { ALL_PERMISSIONS } from "@/config/permissions";
+import Access from "components/share/access";
+import { ALL_PERMISSIONS } from "config/permissions";
 import { callDeletePostLimit } from "config/api";
 import { fetchPayments } from "@/redux/slice/paymentSlide";
 import { Input, Button, Row, Col } from "antd";
-import styles from '@/styles/payment.module.scss';
+import styles from 'styles/payment.module.scss';
 import PaymentStatusModal from "components/admin/payment/module.payment";
 
 
@@ -41,6 +42,14 @@ const PaymentPage = () => {
             }
         }
     }
+
+    const handleCopyPaymentRef = (paymentRef: string) => {
+        navigator.clipboard.writeText(paymentRef).then(() => {
+            message.success('Đã sao chép mã giao dịch thành công');
+        }).catch(() => {
+            message.error('Không thể sao chép mã giao dịch');
+        });
+    };
 
     const handleUpdateClick = (payment: IPayment) => {
         setDataInit(payment);
@@ -98,6 +107,17 @@ const PaymentPage = () => {
             title: 'Mã giao dịch',
             dataIndex: 'paymentRef',
             hideInSearch: true,
+            render: (paymentRef) => (
+                <span>
+                    {paymentRef}
+                    <Tooltip title="Sao chép mã giao dịch">
+                        <CopyOutlined
+                            style={{ marginLeft: '8px', cursor: 'pointer' }}
+                            onClick={() => handleCopyPaymentRef(paymentRef as string)}
+                        />
+                    </Tooltip>
+                </span>
+            ),
         },
         {
             title: 'Số tiền',

@@ -40,6 +40,11 @@ const LayoutAdmin = () => {
 
     useEffect(() => {
         const ACL_ENABLE = import.meta.env.VITE_ACL_ENABLE;
+        if (location.pathname === '/admin' && user?.role?.name !== 'SUPER_ADMIN') {
+            navigate('/admin/job', {
+                replace: true
+            });
+        }
         if (permissions?.length || ACL_ENABLE === 'false') {
 
             const viewCompany = permissions?.find(item =>
@@ -86,7 +91,8 @@ const LayoutAdmin = () => {
                 {
                     label: <Link to='/admin'>Dashboard</Link>,
                     key: '/admin',
-                    icon: <AppstoreOutlined />
+                    icon: <AppstoreOutlined />,
+                    visible: user.role.name === 'SUPER_ADMIN'
                 },
                 ...(viewCompany || ACL_ENABLE === 'false' ? [{
                     label: <Link to='/admin/company'>Công ty</Link>,
@@ -147,7 +153,7 @@ const LayoutAdmin = () => {
 
             setMenuItems(full);
         }
-    }, [permissions])
+    }, [permissions, location, user, navigate])
     useEffect(() => {
         setActiveMenu(location.pathname)
     }, [location])
@@ -202,7 +208,7 @@ const LayoutAdmin = () => {
                     <Menu
                         selectedKeys={[activeMenu]}
                         mode="inline"
-                        items={menuItems}
+                        items={menuItems?.filter((item: any) => item.visible !== false)}
                         onClick={(e) => setActiveMenu(e.key)}
                         className={styles['menu-item']}
                     />
