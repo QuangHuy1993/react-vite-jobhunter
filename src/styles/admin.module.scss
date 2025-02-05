@@ -1,64 +1,175 @@
+$primary-gradient: linear-gradient(135deg, #991B1B 0%, #7F1D1D 100%);
+$hover-gradient: linear-gradient(135deg, #7F1D1D 0%, #991B1B 100%);
+$shadow-normal: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+
 .upsert-job-container {
     background-color: white;
-    padding: 10px 30px;
-    border-radius: 5px;
+    padding: 20px 30px;
+    border-radius: 12px;
     min-height: 100vh;
     height: auto;
+    box-shadow: $shadow-normal;
+    animation: slideIn 0.3s ease-out;
 
     .title {
-        padding: 10px 0 20px 0;
+        padding: 15px 0 25px 0;
+        color: #991B1B;
+        font-weight: 600;
     }
 }
+
 .admin-layout {
     .admin-sider {
         max-width: 300px !important;
         width: 300px !important;
+        background: white;
+        box-shadow: $shadow-normal;
+        transition: all 0.3s ease;
+
+        :global(.ant-layout-sider-children) {
+            background: white;
+        }
     }
 
     .admin-logo {
-        height: 32px;
+        height: 40px;
         margin: 16px;
         text-align: center;
+        transition: all 0.3s ease;
+        img {
+            height: 100%;
+            object-fit: contain;
+        }
     }
 
     .menu-item {
         a {
-            color: rgba(0, 0, 0, 0.88);
+            color: #4B5563;
             display: block;
             width: 100%;
             word-break: break-word;
+            transition: color 0.3s ease;
+
+            &:hover {
+                color: #991B1B;
+            }
         }
     }
-    .ant-menu-submenu-title {
-        white-space: normal !important;
-        height: auto !important;
-        line-height: 1.4 !important;
-        padding: 8px 16px !important;
-    }
-    .ant-menu-item {
-        min-height: 40px;
-        height: auto !important;
-        padding: 8px 16px !important;
-        line-height: 1.4 !important;
+
+    :global {
+        .ant-menu-item-selected {
+            background: $primary-gradient !important;
+            color: white !important;
+            
+            a {
+                color: white !important;
+            }
+        }
+
+        .ant-menu-item:hover {
+            color: #991B1B !important;
+        }
+
+        .ant-menu-submenu-title {
+            white-space: normal !important;
+            height: auto !important;
+            line-height: 1.4 !important;
+            padding: 12px 16px !important;
+            transition: all 0.3s ease !important;
+
+            &:hover {
+                color: #991B1B !important;
+            }
+        }
+
+        .ant-menu-item {
+            min-height: 45px;
+            height: auto !important;
+            padding: 12px 16px !important;
+            line-height: 1.4 !important;
+            margin: 4px 8px !important;
+            border-radius: 6px;
+            transition: all 0.3s ease !important;
+        }
     }
 
     .admin-header {
         display: flex;
         justify-content: space-between;
-        margin-right: 20px;
+        align-items: center;
+        padding: 0 24px;
+        background: white;
+        box-shadow: $shadow-normal;
+        margin-right: 0;
+        height: 64px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        animation: slideDown 0.3s ease-out;
     }
 
     .collapse-btn {
-        font-size: 16px;
+        font-size: 18px;
         width: 64px;
         height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #4B5563;
+
+        &:hover {
+            color: #991B1B;
+        }
     }
 
     .user-info {
         cursor: pointer;
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: rgba(153, 27, 27, 0.1);
+        }
     }
 
     .content {
-        padding: 15px;
+        padding: 24px;
+        min-height: calc(100vh - 64px);
+        background: #F3F4F6;
+        animation: fadeIn 0.3s ease-out;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }

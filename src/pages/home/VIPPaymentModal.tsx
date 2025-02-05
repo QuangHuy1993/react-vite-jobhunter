@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Modal, Select, Divider } from 'antd';
 import { IPostLimit } from '@/types/backend';
 import styles from '@/styles/client.module.scss';
+import { motion, AnimatePresence } from 'framer-motion';
+import { CrownOutlined } from '@ant-design/icons';
 
 interface VIPPaymentModalProps {
     isVisible: boolean;
@@ -17,12 +19,12 @@ interface VIPPaymentModalProps {
 }
 
 const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
-                                                             isVisible,
-                                                             selectedPlan,
-                                                             loading,
-                                                             onConfirm,
-                                                             onCancel
-                                                         }) => {
+    isVisible,
+    selectedPlan,
+    loading,
+    onConfirm,
+    onCancel
+}) => {
     const [selectedMonths, setSelectedMonths] = useState(1);
 
     const monthOptions = [
@@ -34,12 +36,8 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
 
     const calculateTotalPrice = () => {
         if (!selectedPlan) return 0;
-
-        // Tìm giảm giá (nếu có) dựa trên số tháng đã chọn
         const selectedOption = monthOptions.find(option => option.value === selectedMonths);
         const discount = selectedOption?.discount || 0;
-
-        // Tính tổng tiền với giảm giá
         const basePrice = selectedPlan.price * selectedMonths;
         const discountAmount = (basePrice * discount) / 100;
         return basePrice - discountAmount;
@@ -47,7 +45,6 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
 
     const handleConfirm = () => {
         if (!selectedPlan) return;
-
         const totalPrice = calculateTotalPrice();
         onConfirm({
             planId: selectedPlan.id,
@@ -66,7 +63,17 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
 
     return (
         <Modal
-            title="Xác nhận mua gói VIP"
+            title={
+                <div style={{ 
+                    color: '#991B1B', 
+                    fontSize: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                }}>
+                    <CrownOutlined /> Xác nhận mua gói VIP
+                </div>
+            }
             open={isVisible}
             onOk={handleConfirm}
             onCancel={onCancel}
@@ -74,63 +81,104 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
             okText="Xác nhận thanh toán"
             cancelText="Hủy"
             width={500}
+            className={styles.vipModal}
+            okButtonProps={{ 
+                style: { 
+                    backgroundColor: '#991B1B',
+                    borderColor: '#991B1B'
+                }
+            }}
         >
-            <div className={styles.modalContent}>
-                {/* Phần thông tin gói */}
-                <div className={styles.planInfo}>
-                    <h3 className="text-blue-600">{selectedPlan.planName}</h3>
-                    <p>Số bài đăng: {selectedPlan.maxPostsPerMonth} bài/tháng</p>
-                </div>
+            <AnimatePresence>
+                {isVisible && (
+                    <motion.div
+                        className={styles.modalContent}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        <div className={styles.planInfo}>
+                            <motion.h3 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.1 }}
+                                style={{ color: '#991B1B' }}
+                            >
+                                {selectedPlan.planName}
+                            </motion.h3>
+                            <motion.p
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.2 }}
+                            >
+                                Số bài đăng: {selectedPlan.maxPostsPerMonth} bài/tháng
+                            </motion.p>
+                        </div>
 
-                <Divider />
+                        <Divider style={{ margin: '16px 0' }} />
 
-                {/* Phần chọn thời hạn */}
-                <div className={styles.monthSelection}>
-                    <span>Thời hạn:</span>
-                    <Select
-                        defaultValue={1}
-                        style={{ width: 280 }}
-                        onChange={setSelectedMonths}
-                        options={monthOptions.map(option => ({
-                            value: option.value,
-                            label: `${option.label}${option.discount ? ` (Giảm ${option.discount}%)` : ''}`
-                        }))}
-                    />
-                </div>
+                        <div className={styles.monthSelection}>
+                            <span>Thời hạn:</span>
+                            <Select
+                                defaultValue={1}
+                                style={{ width: 280 }}
+                                onChange={setSelectedMonths}
+                                options={monthOptions.map(option => ({
+                                    value: option.value,
+                                    label: `${option.label}${option.discount ? ` (Giảm ${option.discount}%)` : ''}`
+                                }))}
+                            />
+                        </div>
 
-                {/* Phần thông tin giá */}
-                <div className={styles.priceBreakdown}>
-                    <div className={styles.priceRow}>
-                        <span>Giá gói/tháng:</span>
-                        <span>{selectedPlan.price.toLocaleString('vi-VN')} VNĐ</span>
-                    </div>
-
-                    <div className={styles.priceRow}>
-                        <span>Thời hạn:</span>
-                        <span>{selectedMonths} tháng</span>
-                    </div>
-
-                    {discount > 0 && (
-                        <>
+                        <motion.div 
+                            className={styles.priceBreakdown}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                        >
                             <div className={styles.priceRow}>
-                                <span>Tạm tính:</span>
-                                <span>{originalPrice.toLocaleString('vi-VN')} VNĐ</span>
+                                <span>Giá gói/tháng:</span>
+                                <span>{selectedPlan.price.toLocaleString('vi-VN')} VNĐ</span>
                             </div>
-                            <div className={`${styles.priceRow} ${styles.discount}`}>
-                                <span>Giảm giá:</span>
-                                <span>-{discount}%</span>
+
+                            <div className={styles.priceRow}>
+                                <span>Thời hạn:</span>
+                                <span>{selectedMonths} tháng</span>
                             </div>
-                        </>
-                    )}
 
-                    <Divider className="my-3" />
+                            {discount > 0 && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <div className={styles.priceRow}>
+                                        <span>Tạm tính:</span>
+                                        <span>{originalPrice.toLocaleString('vi-VN')} VNĐ</span>
+                                    </div>
+                                    <div className={`${styles.priceRow} ${styles.discount}`}>
+                                        <span>Giảm giá:</span>
+                                        <span>-{discount}%</span>
+                                    </div>
+                                </motion.div>
+                            )}
 
-                    <div className={styles.totalPrice}>
-                        <span>Tổng tiền:</span>
-                        <span>{totalPrice.toLocaleString('vi-VN')} VNĐ</span>
-                    </div>
-                </div>
-            </div>
+                            <Divider style={{ margin: '12px 0' }} />
+
+                            <motion.div 
+                                className={styles.totalPrice}
+                                initial={{ scale: 0.95 }}
+                                animate={{ scale: 1 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <span>Tổng tiền:</span>
+                                <span>{totalPrice.toLocaleString('vi-VN')} VNĐ</span>
+                            </motion.div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </Modal>
     );
 };

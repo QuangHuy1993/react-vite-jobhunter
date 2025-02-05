@@ -20,33 +20,33 @@ import { isMobile } from 'react-device-detect';
 import type { MenuProps } from 'antd';
 import { setLogoutAction } from '@/redux/slice/accountSlide';
 import { ALL_PERMISSIONS } from '@/config/permissions';
-import {TableChartOutlined} from "@mui/icons-material";
+import { TableChartOutlined } from "@mui/icons-material";
 import styles from '@/styles/admin.module.scss';
+import { motion } from 'framer-motion';
+import LoadingSpinner from '@/components/share/LoadingSpinner';
 
 const { Content, Sider } = Layout;
 
 const LayoutAdmin = () => {
     const location = useLocation();
-
     const [collapsed, setCollapsed] = useState(false);
     const [activeMenu, setActiveMenu] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const user = useAppSelector(state => state.account.user);
-
     const permissions = useAppSelector(state => state.account.user.role.permissions);
     const [menuItems, setMenuItems] = useState<MenuProps['items']>([]);
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
+    // ... permissions checking code remains the same ...
     useEffect(() => {
         const ACL_ENABLE = import.meta.env.VITE_ACL_ENABLE;
         if (location.pathname === '/admin' && user?.role?.name !== 'SUPER_ADMIN') {
-            navigate('/admin/job', {
-                replace: true
-            });
+            navigate('/admin/job', { replace: true });
         }
         if (permissions?.length || ACL_ENABLE === 'false') {
-
+            // ... rest of the permission checks remain the same ...
             const viewCompany = permissions?.find(item =>
                 item.apiPath === ALL_PERMISSIONS.COMPANIES.GET_PAGINATE.apiPath
                 && item.method === ALL_PERMISSIONS.COMPANIES.GET_PAGINATE.method
@@ -99,7 +99,6 @@ const LayoutAdmin = () => {
                     key: '/admin/company',
                     icon: <BankOutlined />,
                 }] : []),
-
                 ...(viewUser || ACL_ENABLE === 'false' ? [{
                     label: <Link to='/admin/user'>Người dùng</Link>,
                     key: '/admin/user',
@@ -130,7 +129,6 @@ const LayoutAdmin = () => {
                     key: '/admin/job',
                     icon: <ScheduleOutlined />
                 }] : []),
-
                 ...(viewResume || ACL_ENABLE === 'false' ? [{
                     label: <Link to='/admin/resume'>Hồ sơ</Link>,
                     key: '/admin/resume',
@@ -146,37 +144,26 @@ const LayoutAdmin = () => {
                     key: '/admin/role',
                     icon: <ExceptionOutlined />
                 }] : []),
-
-
-
             ];
 
             setMenuItems(full);
         }
     }, [permissions, location, user, navigate])
+
     useEffect(() => {
         setActiveMenu(location.pathname)
     }, [location])
 
     const handleLogout = async () => {
+        setIsLoading(true);
         const res = await callLogout();
+        setIsLoading(false);
         if (res && +res.statusCode === 200) {
             dispatch(setLogoutAction({}));
             message.success('Đăng xuất thành công');
             navigate('/')
         }
     }
-
-    // if (isMobile) {
-    //     items.push({
-    //         label: <label
-    //             style={{ cursor: 'pointer' }}
-    //             onClick={() => handleLogout()}
-    //         >Đăng xuất</label>,
-    //         key: 'logout',
-    //         icon: <LogoutOutlined />
-    //     })
-    // }
 
     const itemsDropdown = [
         {
@@ -193,57 +180,81 @@ const LayoutAdmin = () => {
     ];
 
     return (
-        <Layout className={styles['admin-layout']} style={{ minHeight: '100vh' }}>
-            {!isMobile ? (
-                <Sider
-                    theme='light'
-                    collapsible
-                    collapsed={collapsed}
-                    onCollapse={setCollapsed}
-                    className={styles['admin-sider']}
-                >
-                    <div className={styles['admin-logo']}>
-                        <BugOutlined /> ADMIN
-                    </div>
+        <>
+            {isLoading && <LoadingSpinner />}
+            <Layout className={styles['admin-layout']} style={{ minHeight: '100vh' }}>
+                {!isMobile ? (
+                    <Sider
+                        theme='light'
+                        collapsible
+                        collapsed={collapsed}
+                        onCollapse={setCollapsed}
+                        className={styles['admin-sider']}
+                    >
+                        <motion.div
+                            className={styles['admin-logo']}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <BugOutlined style={{ fontSize: '24px', color: '#991B1B' }} />
+                            {!collapsed && <span style={{ marginLeft: '10px', color: '#991B1B', fontWeight: 600 }}>ADMIN</span>}
+                        </motion.div>
+                        <Menu
+                            selectedKeys={[activeMenu]}
+                            mode="inline"
+                            items={menuItems?.filter((item: any) => item.visible !== false)}
+                            onClick={(e) => {
+                                setIsLoading(true);
+                                setActiveMenu(e.key);
+                                setTimeout(() => setIsLoading(false), 300);
+                            }}
+                            className={styles['menu-item']}
+                        />
+                    </Sider>
+                ) : (
                     <Menu
                         selectedKeys={[activeMenu]}
-                        mode="inline"
-                        items={menuItems?.filter((item: any) => item.visible !== false)}
+                        items={menuItems}
                         onClick={(e) => setActiveMenu(e.key)}
-                        className={styles['menu-item']}
+                        mode="horizontal"
                     />
-                </Sider>
-            ) : (
-                <Menu
-                    selectedKeys={[activeMenu]}
-                    items={menuItems}
-                    onClick={(e) => setActiveMenu(e.key)}
-                    mode="horizontal"
-                />
-            )}
-
-            <Layout>
-                {!isMobile && (
-                    <div className={styles['admin-header']}>
-                        <Button
-                            type="text"
-                            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                            onClick={() => setCollapsed(!collapsed)}
-                            className={styles['collapse-btn']}
-                        />
-                        <Dropdown menu={{ items: itemsDropdown }} trigger={['click']}>
-                            <Space className={styles['user-info']}>
-                                Welcome {user?.name}
-                                <Avatar>{user?.name?.substring(0, 2)?.toUpperCase()}</Avatar>
-                            </Space>
-                        </Dropdown>
-                    </div>
                 )}
-                <Content className={styles['content']}>
-                    <Outlet />
-                </Content>
+
+                <Layout>
+                    {!isMobile && (
+                        <motion.div 
+                            className={styles['admin-header']}
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <Button
+                                type="text"
+                                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                                onClick={() => setCollapsed(!collapsed)}
+                                className={styles['collapse-btn']}
+                            />
+                            <Dropdown menu={{ items: itemsDropdown }} trigger={['click']}>
+                                <Space className={styles['user-info']}>
+                                    <span style={{ color: '#4B5563' }}>Welcome</span>
+                                    <span style={{ color: '#991B1B', fontWeight: 500 }}>{user?.name}</span>
+                                    <Avatar style={{ backgroundColor: '#991B1B' }}>{user?.name?.substring(0, 2)?.toUpperCase()}</Avatar>
+                                </Space>
+                            </Dropdown>
+                        </motion.div>
+                    )}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.2 }}
+                        className={styles['content']}
+                    >
+                        <Outlet />
+                    </motion.div>
+                </Layout>
             </Layout>
-        </Layout>
+        </>
     );
 };
 

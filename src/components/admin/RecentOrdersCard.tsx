@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Table } from 'antd';
+import { Card, Table, Skeleton } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { callGetPaymentSuccess } from '@/config/api';
 import type { IPayment } from '@/types/backend';
 import styles from '@/styles/dashboard.module.scss';
+import { motion } from 'framer-motion';
 
 const RecentOrdersCard: React.FC = () => {
     const [payments, setPayments] = useState<IPayment[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchPayments = async () => {
             try {
                 const res = await callGetPaymentSuccess();
                 if (res?.data?.data) {
-                    // Only keep the most recent 50 orders
                     const recentPayments = res.data.data.slice(0, 50);
                     setPayments(recentPayments);
                 }
             } catch (error) {
                 console.error('Error:', error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchPayments();
@@ -30,7 +33,9 @@ const RecentOrdersCard: React.FC = () => {
             dataIndex: 'paymentRef',
             key: 'paymentRef',
             render: (text) => (
-                <span style={{ fontWeight: 500, color: '#262626' }}>{text}</span>
+                <span style={{ fontWeight: 500, color: '#1F2937' }}>
+                    {text}
+                </span>
             )
         },
         {
@@ -38,7 +43,7 @@ const RecentOrdersCard: React.FC = () => {
             dataIndex: 'totalPrice',
             key: 'totalPrice',
             render: (amount) => (
-                <span style={{ color: '#52c41a', fontWeight: 600 }}>
+                <span style={{ color: '#991B1B', fontWeight: 600 }}>
                     {new Intl.NumberFormat('vi-VN', {
                         style: 'currency',
                         currency: 'VND'
@@ -51,7 +56,7 @@ const RecentOrdersCard: React.FC = () => {
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (text) => (
-                <span style={{ color: '#8c8c8c' }}>
+                <span style={{ color: '#4B5563' }}>
                     {new Date(text).toLocaleString('vi-VN')}
                 </span>
             )
@@ -60,7 +65,16 @@ const RecentOrdersCard: React.FC = () => {
 
     return (
         <Card
-            title={<div style={{ textAlign: 'center', fontSize: '16px', fontWeight: 500 }}>Đơn hàng mới</div>}
+            title={
+                <div style={{ 
+                    textAlign: 'center', 
+                    fontSize: '18px', 
+                    fontWeight: 600,
+                    color: '#991B1B'
+                }}>
+                    Đơn hàng mới
+                </div>
+            }
             bordered={false}
             className={styles['orders-card']}
             bodyStyle={{
@@ -69,23 +83,42 @@ const RecentOrdersCard: React.FC = () => {
                 overflow: 'auto'
             }}
             headStyle={{
-                borderBottom: '1px solid #f0f0f0',
-                padding: '16px 24px'
+                borderBottom: '2px solid rgba(153, 27, 27, 0.1)',
+                padding: '16px 24px',
+                backgroundColor: 'rgba(153, 27, 27, 0.02)'
             }}
         >
-            <Table
-                columns={columns}
-                dataSource={payments}
-                pagination={{
-                    pageSize: 5,
-                    position: ['bottomCenter'],
-                    size: 'small',
-                    showSizeChanger: false
-                }}
-                size="middle"
-                rowKey="id"
-                scroll={{ y: 'calc(100vh - 450px)' }}
-            />
+            {loading ? (
+                <div style={{ padding: '20px' }}>
+                    <Skeleton active paragraph={{ rows: 5 }} />
+                </div>
+            ) : (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2 }}
+                >
+                    <Table
+                        columns={columns}
+                        dataSource={payments}
+                        pagination={{
+                            pageSize: 5,
+                            position: ['bottomCenter'],
+                            size: 'small',
+                            showSizeChanger: false,
+                        }}
+                        size="middle"
+                        rowKey="id"
+                        scroll={{ y: 'calc(100vh - 450px)' }}
+                        className={styles['recent-orders-table']}
+                        onRow={() => ({
+                            style: {
+                                transition: 'all 0.1s ease'
+                            }
+                        })}
+                    />
+                </motion.div>
+            )}
         </Card>
     );
 };

@@ -1,66 +1,76 @@
+$primary-red: #991B1B;
+$primary-gradient: linear-gradient(135deg, #991B1B 0%, #7F1D1D 100%);
+$shadow-normal: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+
 .dashboard-container {
   padding: 24px;
+  animation: fadeIn 0.5s ease-out;
 
   .statistic-card {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03),
-    0 1px 6px -1px rgba(0, 0, 0, 0.02),
-    0 2px 4px 0 rgba(0, 0, 0, 0.02);
+    border-radius: 12px;
+    box-shadow: $shadow-normal;
     transition: all 0.3s ease;
 
     &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transform: translateY(-2px);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     }
 
     .icon-wrapper {
       width: 48px;
       height: 48px;
-      border-radius: 50%;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-right: 16px;
+      transition: all 0.3s ease;
 
       &.blue {
-        background: rgba(24, 144, 255, 0.1);
-        color: #1890ff;
+        background: rgba(153, 27, 27, 0.1);
+        color: $primary-red;
       }
 
       &.green {
-        background: rgba(82, 196, 26, 0.1);
-        color: #52c41a;
+        background: rgba(153, 27, 27, 0.15);
+        color: $primary-red;
       }
 
       &.purple {
-        background: rgba(114, 46, 209, 0.1);
-        color: #722ed1;
+        background: rgba(153, 27, 27, 0.2);
+        color: $primary-red;
       }
 
       &.orange {
-        background: rgba(250, 173, 20, 0.1);
-        color: #faad14;
+        background: rgba(153, 27, 27, 0.25);
+        color: $primary-red;
       }
+    }
+
+    &:hover .icon-wrapper {
+      transform: scale(1.1);
     }
   }
 
   .info-section {
-    margin-top: 48px; // Tăng khoảng cách với cards phía trên
+    margin-top: 48px;
     display: grid;
-    grid-template-columns: 1fr 1fr; // Chia đều 2 cột
+    grid-template-columns: 1fr 1fr;
     gap: 24px;
-    margin-bottom: 24px; // Thêm khoảng cách phía dưới
+    margin-bottom: 24px;
 
     .orders-card, .revenue-card {
       background: white;
-      border-radius: 8px;
-      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+      border-radius: 12px;
+      box-shadow: $shadow-normal;
       transition: all 0.3s ease;
-      height: 100%; // Đảm bảo chiều cao bằng nhau
+      height: 100%;
+      overflow: hidden;
 
       &:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
       }
     }
 
@@ -69,10 +79,15 @@
         .ant-table-thead > tr > th {
           background: #fafafa;
           font-weight: 600;
+          border-bottom: 2px solid $primary-red;
         }
 
         .ant-table-tbody > tr:hover > td {
-          background: #f5f5f5;
+          background: rgba(153, 27, 27, 0.05);
+        }
+
+        .ant-table-row {
+          transition: all 0.3s ease;
         }
       }
     }
@@ -81,7 +96,6 @@
 
 .recent-orders-table {
   :global {
-    // Custom scrollbar
     .ant-table-body {
       &::-webkit-scrollbar {
         width: 6px;
@@ -93,50 +107,68 @@
       }
 
       &::-webkit-scrollbar-thumb {
-        background: #d9d9d9;
+        background: rgba(153, 27, 27, 0.2);
         border-radius: 3px;
 
         &:hover {
-          background: #bfbfbf;
+          background: rgba(153, 27, 27, 0.4);
         }
       }
     }
 
-    // Table header
     .ant-table-thead > tr > th {
       background: #fafafa;
       font-weight: 600;
       text-align: left;
       padding: 12px 16px;
+      border-bottom: 2px solid $primary-red;
+      transition: all 0.3s ease;
 
       &::before {
-        display: none; // Ẩn border mặc định
+        display: none;
       }
     }
 
-    // Table rows
     .ant-table-tbody > tr > td {
       padding: 12px 16px;
       border-bottom: 1px solid #f0f0f0;
+      transition: all 0.3s ease;
     }
 
-    // Hover effect
     .ant-table-tbody > tr:hover > td {
-      background: #f5f5f5;
+      background: rgba(153, 27, 27, 0.05);
     }
 
-    // Pagination
     .ant-pagination {
       margin: 16px 0;
 
       .ant-pagination-item-active {
-        border-color: #1890ff;
-
+        border-color: $primary-red;
+        
         a {
-          color: #1890ff;
+          color: $primary-red;
+        }
+      }
+
+      .ant-pagination-item:hover {
+        border-color: $primary-red;
+        
+        a {
+          color: $primary-red;
         }
       }
     }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

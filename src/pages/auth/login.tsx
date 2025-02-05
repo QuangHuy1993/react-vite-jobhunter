@@ -9,6 +9,7 @@ import { useAppSelector } from '@/redux/hooks';
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { motion } from "framer-motion";
+import LoadingSpinner from '@/components/share/LoadingSpinner';
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -35,9 +36,7 @@ const LoginPage = () => {
     };
 
     useEffect(() => {
-        //đã login => redirect to '/'
         if (isAuthenticated) {
-            // navigate('/');
             window.location.href = '/';
         }
     }, [])
@@ -63,114 +62,121 @@ const LoginPage = () => {
         }
     };
 
-
     return (
-        <div className={styles["login-page"]}>
-            <main className={styles.main}>
-                <div className={styles.container}>
-                    <section className={styles.wrapper}>
-                        <div className={styles.heading}>
-                            <h2 className={`${styles.text} ${styles["text-large"]}`}>Đăng Nhập</h2>
-                            <Divider />
-
-                        </div>
-                        <Form
-                            name="basic"
-                            // style={{ maxWidth: 600, margin: '0 auto' }}
-                            onFinish={onFinish}
-                            autoComplete="off"
+        <>
+            {isSubmit && <LoadingSpinner />}
+            <div className={styles["login-page"]}>
+                <main className={styles.main}>
+                    <div className={styles.container}>
+                        <motion.section 
+                            className={styles.wrapper}
+                            initial="hidden"
+                            animate="visible"
+                            variants={fadeIn}
+                            transition={{ duration: 0.5 }}
                         >
-                            <Form.Item
-                                labelCol={{span: 24}} //whole column
-                                label="Email"
-                                name="username"
-                                rules={[{required: true, message: 'Email không được để trống!'}]}
-                            >
-                                <Input/>
-                            </Form.Item>
-
-                            <Form.Item
-                                labelCol={{span: 24}} //whole column
-                                label="Mật khẩu"
-                                name="password"
-                                rules={[{required: true, message: 'Mật khẩu không được để trống!'}]}
-                            >
-                                <Input.Password/>
-                            </Form.Item>
-
-                            <Form.Item
-                                // wrapperCol={{ offset: 6, span: 16 }}
-                            >
-                                <Button type="primary" htmlType="submit" loading={isSubmit}>
-                                    Đăng nhập
-                                </Button>
-                            </Form.Item>
-                            <Divider>Hoặc sử dụng</Divider>
-                            <div className={styles["social-buttons"]}>
-                                {/* Nút Google */}
-                                <Button
-                                    className={styles["social-btn"]}
-                                    onClick={() => {
-                                        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
-                                    }}
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        height: "40px",
-                                        width: "50%",
-                                        border: "1px solid #dadce0",
-                                        backgroundColor: "#fff",
-                                        color: "#333",
-                                        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
-                                        borderRadius: "8px",
-                                        fontSize: "14px",
-                                        fontWeight: 500
-                                    }}
-                                >
-                                    <FcGoogle size={20} style={{marginRight: '8px'}}/>
-                                    Google
-                                </Button>
-
-                                {/* Nút Facebook */}
-                                <Button
-                                    className={styles["social-btn"]}
-                                    onClick={() => {
-                                        window.location.href = 'http://localhost:8080/oauth2/authorization/facebook';
-                                    }}
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        height: "40px",
-                                        width: "50%",
-                                        border: "1px solid #1877f2",
-                                        backgroundColor: "#1877f2",
-                                        color: "#fff",
-                                        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
-                                        borderRadius: "8px",
-                                        fontSize: "14px",
-                                        fontWeight: 500
-                                    }}
-                                >
-                                    <FaFacebook size={20} style={{marginRight: '8px'}}/>
-                                    Facebook
-                                </Button>
+                            <div className={styles.heading}>
+                                <h2 className={`${styles.text} ${styles["text-large"]}`}>Đăng Nhập</h2>
+                                <Divider />
                             </div>
+                            <Form
+                                name="basic"
+                                onFinish={onFinish}
+                                autoComplete="off"
+                            >
+                                <Form.Item
+                                    labelCol={{span: 24}}
+                                    label="Email"
+                                    name="username"
+                                    rules={[{required: true, message: 'Email không được để trống!'}]}
+                                >
+                                    <Input/>
+                                </Form.Item>
 
-                            <p className="text text-normal">Chưa có tài khoản ?
-                                <span>
-                                    <Link to='/register'> Đăng Ký </Link>
-                                </span>
-                            </p>
-                            <p className="text text-normal">
-                                <Link to='/forget-password'>Quên mật khẩu?</Link>
-                            </p>
-                        </Form>
-                    </section>
-                </div>
-            </main>
-        </div>
+                                <Form.Item
+                                    labelCol={{span: 24}}
+                                    label="Mật khẩu"
+                                    name="password"
+                                    rules={[{required: true, message: 'Mật khẩu không được để trống!'}]}
+                                >
+                                    <Input.Password/>
+                                </Form.Item>
+
+                                <Form.Item>
+                                    <Button type="primary" htmlType="submit" loading={isSubmit}>
+                                        Đăng nhập
+                                    </Button>
+                                </Form.Item>
+                                <Divider>Hoặc sử dụng</Divider>
+                                <motion.div 
+                                    className={styles["social-buttons"]}
+                                    variants={socialButtonsVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                >
+                                    <Button
+                                        className={styles["social-btn"]}
+                                        onClick={() => {
+                                            window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+                                        }}
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            height: "40px",
+                                            width: "50%",
+                                            border: "1px solid #dadce0",
+                                            backgroundColor: "#fff",
+                                            color: "#333",
+                                            boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+                                            borderRadius: "8px",
+                                            fontSize: "14px",
+                                            fontWeight: 500
+                                        }}
+                                    >
+                                        <FcGoogle size={20} style={{marginRight: '8px'}}/>
+                                        Google
+                                    </Button>
+
+                                    <Button
+                                        className={styles["social-btn"]}
+                                        onClick={() => {
+                                            window.location.href = 'http://localhost:8080/oauth2/authorization/facebook';
+                                        }}
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            height: "40px",
+                                            width: "50%",
+                                            border: "1px solid #1877f2",
+                                            backgroundColor: "#1877f2",
+                                            color: "#fff",
+                                            boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+                                            borderRadius: "8px",
+                                            fontSize: "14px",
+                                            fontWeight: 500
+                                        }}
+                                    >
+                                        <FaFacebook size={20} style={{marginRight: '8px'}}/>
+                                        Facebook
+                                    </Button>
+                                </motion.div>
+
+                                <p className="text text-normal">Chưa có tài khoản ?
+                                    <span>
+                                        <Link to='/register'> Đăng Ký </Link>
+                                    </span>
+                                </p>
+                                <p className="text text-normal">
+                                    <Link to='/forget-password'>Quên mật khẩu?</Link>
+                                </p>
+                            </Form>
+                        </motion.section>
+                    </div>
+                </main>
+            </div>
+        </>
     )
 }
 
