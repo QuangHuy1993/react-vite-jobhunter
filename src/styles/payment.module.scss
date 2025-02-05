@@ -10,19 +10,27 @@
       .ant-row {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
         gap: 12px;
         background: #f5f5f5;
         padding: 16px;
         border-radius: 8px;
 
+        .ant-col {
+          display: flex;
+          align-items: center;
+        }
+
         .search-label {
           white-space: nowrap;
           font-weight: 500;
           color: #262626;
+          margin-right: 8px;
         }
 
         .ant-input {
-          flex: 1;
+          width: 200px;
           border-radius: 6px;
           height: 40px;
           transition: all 0.3s;
@@ -58,7 +66,32 @@
             }
           }
         }
+
+        .ant-picker {
+          width: 150px;
+        }
       }
+    }
+  }
+
+  .export-section {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .export-button {
+    background-color: #52c41a !important;
+    border-color: #52c41a !important;
+    color: white !important;
+
+    &:hover {
+      background-color: #73d13d !important;
+      border-color: #73d13d !important;
+    }
+
+    .anticon {
+      font-size: 16px;
     }
   }
 

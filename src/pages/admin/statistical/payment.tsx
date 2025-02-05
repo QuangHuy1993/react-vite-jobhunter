@@ -4,16 +4,18 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { IPayment } from "@/types/backend";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { ActionType, ProColumns } from '@ant-design/pro-components';
-import { message, notification, Popconfirm, Space, Tooltip  } from "antd";
+import { message, notification, Popconfirm, Space, Tooltip,DatePicker, Input, Button, Row, Col, Image   } from "antd";
 import React, { useState, useRef, useEffect } from 'react';
 import dayjs from 'dayjs';
 import Access from "components/share/access";
 import { ALL_PERMISSIONS } from "config/permissions";
 import { callDeletePostLimit } from "config/api";
 import { fetchPayments } from "@/redux/slice/paymentSlide";
-import { Input, Button, Row, Col } from "antd";
 import styles from 'styles/payment.module.scss';
 import PaymentStatusModal from "components/admin/payment/module.payment";
+import { FileExcelOutlined } from '@ant-design/icons';
+import * as XLSX from 'xlsx';
+import iconExcel from '@/assets/icon_excel.png';
 
 
 const PaymentPage = () => {
@@ -26,8 +28,63 @@ const PaymentPage = () => {
     const isFetching = useAppSelector((state) => state.payment.isFetching);
     const [searchValue, setSearchValue] = useState("");
     const [searchParams, setSearchParams] = useState({});
+    const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(null);
+    const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null);
 
+    const handleExportExcel = () => {
+        if (!startDate || !endDate) {
+            message.error('Vui lòng chọn ngày bắt đầu và kết thúc');
+            return;
+        }
 
+        const filteredPayments = payments.filter(payment => {
+            const paymentDate = dayjs(payment.createdAt);
+            return paymentDate.isAfter(startDate.startOf('day')) && paymentDate.isBefore(endDate.endOf('day'));
+        });
+
+        if (filteredPayments.length === 0) {
+            message.warning('Không có dữ liệu trong khoảng thời gian đã chọn');
+            return;
+        }
+
+        try {
+            const worksheet = XLSX.utils.json_to_sheet(filteredPayments.map(payment => ({
+                'ID': payment.id,
+                'Mã giao dịch': payment.paymentRef,
+                'Số tiền': payment.totalPrice,
+                'Nội dung': payment.transferContent,
+                'Phương thức': payment.paymentMethod,
+                'Trạng thái': payment.paymentStatus,
+                'Người thanh toán': payment.user?.name,
+                'User_ID': payment.user?.id,
+                'Ngày tạo': dayjs(payment.createdAt).format('DD-MM-YYYY HH:mm:ss'),
+                'Ngày cập nhật': dayjs(payment.updatedAt).format('DD-MM-YYYY HH:mm:ss')
+            })));
+
+            // Đặt chiều rộng cột
+            const columnWidths = [
+                { wch: 5 },  // ID
+                { wch: 15 }, // Mã giao dịch
+                { wch: 15 }, // Số tiền
+                { wch: 30 }, // Nội dung
+                { wch: 15 }, // Phương thức
+                { wch: 20 }, // Trạng thái
+                { wch: 20 }, // Người thanh toán
+                { wch: 10 }, // User_ID
+                { wch: 20 }, // Ngày tạo
+                { wch: 20 }  // Ngày cập nhật
+            ];
+            worksheet['!cols'] = columnWidths;
+
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Payments");
+            XLSX.writeFile(workbook, `payments_export_${startDate.format('DDMMYYYY')}_${endDate.format('DDMMYYYY')}.xlsx`);
+
+            message.success('Export Excel thành công');
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi export Excel');
+        }
+    };
 
     const handleDeletePostLimit = async (id: number | undefined) => {
         if (id) {
@@ -219,29 +276,52 @@ const PaymentPage = () => {
         <div className={styles['payment-container']}>
             <Access permission={ALL_PERMISSIONS.PAYMENTS?.GET_PAGINATE}>
                 <div className={styles['search-section']}>
-                    <div className={styles['search-section']}>
-                        <Row justify="center">
-                            <Col xs={24} sm={16} md={12}>
-                                <Space size={12} style={{width: '100%'}}>
-                                    <span className="search-label">Mã giao dịch:</span>
-                                    <Input
-                                        placeholder="Nhập mã giao dịch"
-                                        value={searchValue}
-                                        onChange={(e) => setSearchValue(e.target.value)}
-                                    />
-                                    <Button type="primary" onClick={handleSearchSubmit}>
-                                        Tìm kiếm
-                                    </Button>
-                                    <Button onClick={() => {
-                                        setSearchValue("");
-                                        setSearchParams({});
-                                    }}>
-                                        Làm mới
-                                    </Button>
-                                </Space>
-                            </Col>
-                        </Row>
-                    </div>
+                    <Row justify="space-between" align="middle">
+                        <Col xs={24} sm={12} md={12}>
+                            <Space size={12}>
+                                <span className="search-label">Mã giao dịch:</span>
+                                <Input
+                                    placeholder="Nhập mã giao dịch"
+                                    value={searchValue}
+                                    onChange={(e) => setSearchValue(e.target.value)}
+                                />
+                                <Button type="primary" onClick={handleSearchSubmit}>
+                                    Tìm kiếm
+                                </Button>
+                                <Button onClick={() => {
+                                    setSearchValue("");
+                                    setSearchParams({});
+                                }}>
+                                    Làm mới
+                                </Button>
+                            </Space>
+                        </Col>
+                        <Col xs={24} lg={10}>
+                            <Space size={8} className={styles['export-section']}>
+                                <DatePicker
+                                    onChange={(date) => setStartDate(date)}
+                                    format="DD-MM-YYYY"
+                                    placeholder="Từ ngày"
+                                />
+                                <DatePicker
+                                    onChange={(date) => setEndDate(date)}
+                                    format="DD-MM-YYYY"
+                                    placeholder="Đến ngày"
+                                />
+                                <Button
+                                    type="primary"
+                                    onClick={handleExportExcel}
+                                    className={styles['export-button']}
+                                    disabled={!startDate || !endDate}
+                                >
+                                    <Space>
+                                        <Image src={iconExcel} preview={false} width={20} height={20} />
+                                        Xuất Excel
+                                    </Space>
+                                </Button>
+                            </Space>
+                        </Col>
+                    </Row>
                 </div>
 
                 <div className={styles['table-container']}>
