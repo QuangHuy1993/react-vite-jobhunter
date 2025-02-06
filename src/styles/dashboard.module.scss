@@ -6,6 +6,19 @@ $shadow-normal: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   padding: 24px;
   animation: fadeIn 0.5s ease-out;
 
+  .statistic-row {
+    margin: 0 -8px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .statistic-col {
+    padding: 0 8px;
+    margin-bottom: 16px;
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+
   .statistic-card {
     background: white;
     border-radius: 12px;
@@ -43,6 +56,10 @@ $shadow-normal: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
       }
 
       &.orange {
+        background: rgba(153, 27, 27, 0.25);
+        color: $primary-red;
+      }
+      &.red {
         background: rgba(153, 27, 27, 0.25);
         color: $primary-red;
       }

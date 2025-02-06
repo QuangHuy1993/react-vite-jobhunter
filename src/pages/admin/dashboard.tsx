@@ -1,15 +1,19 @@
-import React from 'react';
-import { Row, Col, Card } from 'antd';
+import { callCountCompanies, callCountJobs, callCountResumes, callCountUsers, callGetTotalPricePaymentSuccess } from '@/config/api';
+import styles from '@/styles/dashboard.module.scss';
 import {
-    UserOutlined,
-    BankOutlined,
-    ScheduleOutlined,
     AliwangwangOutlined,
+    BankOutlined,
+    LineChartOutlined,
+    ScheduleOutlined,
+    UserOutlined,
 } from '@ant-design/icons';
+import { Card, Col, Row } from 'antd';
 import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 import RecentOrdersCard from '../../components/admin/RecentOrdersCard';
 import RevenueChart from '../../components/admin/RevenueChart';
-import styles from '@/styles/dashboard.module.scss';
+
+
 
 const StatisticCard = ({ title, value, icon, colorClass, index }: any) => (
     <motion.div
@@ -36,6 +40,37 @@ const StatisticCard = ({ title, value, icon, colorClass, index }: any) => (
 );
 
 const Dashboard: React.FC = () => {
+    const [userCount, setUserCount] = useState(0);
+    const [companyCount, setCompanyCount] = useState(0);
+    const [jobCount, setJobCount] = useState(0);
+    const [resumeCount, setResumeCount] = useState(0);
+    const [totalRevenue, setTotalRevenue] = useState(0);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [users, companies, jobs, resumes, revenue] = await Promise.all([
+                    callCountUsers(),
+                    callCountCompanies(),
+                    callCountJobs(),
+                    callCountResumes(),
+                    callGetTotalPricePaymentSuccess()
+                ]);
+
+                setUserCount(users.data ?? 0);
+                setCompanyCount(companies.data ?? 0);
+                setJobCount(jobs.data ?? 0);
+                setResumeCount(resumes.data ?? 0);
+                setTotalRevenue(revenue.data?.data ?? 0);
+            } catch (error) {
+                console.error('Error fetching dashboard data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+
     const container = {
         hidden: { opacity: 0 },
         show: {
@@ -48,65 +83,48 @@ const Dashboard: React.FC = () => {
     };
 
     return (
-        <motion.div 
+        <motion.div
             className={styles['dashboard-container']}
             initial="hidden"
             animate="show"
             variants={container}
         >
-            <Row gutter={[24, 24]}>
-                <Col xs={24} sm={12} lg={6}>
-                    <StatisticCard
-                        title="Người dùng hoạt động"
-                        value={112893}
-                        icon={<UserOutlined style={{ fontSize: '24px' }} />}
-                        colorClass="blue"
-                        index={0}
-                    />
-                </Col>
-                <Col xs={24} sm={12} lg={6}>
-                    <StatisticCard
-                        title="Công ty"
-                        value={2345}
-                        icon={<BankOutlined style={{ fontSize: '24px' }} />}
-                        colorClass="green"
-                        index={1}
-                    />
-                </Col>
-                <Col xs={24} sm={12} lg={6}>
-                    <StatisticCard
-                        title="Công việc"
-                        value={3456}
-                        icon={<ScheduleOutlined style={{ fontSize: '24px' }} />}
-                        colorClass="purple"
-                        index={2}
-                    />
-                </Col>
-                <Col xs={24} sm={12} lg={6}>
-                    <StatisticCard
-                        title="Hồ sơ"
-                        value={8434}
-                        icon={<AliwangwangOutlined style={{ fontSize: '24px' }} />}
-                        colorClass="orange"
-                        index={3}
-                    />
-                </Col>
+            <Row gutter={[16, 16]} className={styles['statistic-row']}>
+                {[
+                    { title: "Người dùng hoạt động", value: userCount, icon: <UserOutlined />, colorClass: "blue" },
+                    { title: "Công ty", value: companyCount, icon: <BankOutlined />, colorClass: "green" },
+                    { title: "Công việc", value: jobCount, icon: <ScheduleOutlined />, colorClass: "purple" },
+                    { title: "Hồ sơ", value: resumeCount, icon: <AliwangwangOutlined />, colorClass: "orange" },
+                    { title: "Doanh thu", value: `${totalRevenue.toLocaleString()}đ`, icon: <LineChartOutlined />, colorClass: "red" }
+
+                ].map((item, index) => (
+                    <Col xs={24} sm={12} md={12} lg={4} xl={4} key={index} className={styles['statistic-col']}>
+                        <StatisticCard
+                            title={item.title}
+                            value={item.value}
+                            icon={React.cloneElement(item.icon, { style: { fontSize: '24px' } })}
+                            colorClass={item.colorClass}
+                            index={index}
+                        />
+                    </Col>
+                ))}
             </Row>
 
-            <motion.div 
+
+            <motion.div
                 className={styles['info-section']}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2, delay: 0.2 }}
             >
-                <motion.div 
+                <motion.div
                     className={styles['orders-card']}
                     whileHover={{ scale: 1.005 }}
                     transition={{ duration: 0.1 }}
                 >
                     <RecentOrdersCard />
                 </motion.div>
-                <motion.div 
+                <motion.div
                     className={styles['revenue-card']}
                     whileHover={{ scale: 1.005 }}
                     transition={{ duration: 0.1 }}

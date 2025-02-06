@@ -1,20 +1,21 @@
 import {
+    IAccount,
     IBackendRes,
     ICompany,
-    IAccount,
-    IUser,
-    IModelPaginate,
     IGetAccount,
     IJob,
-    IResume,
+    IModelPaginate,
+    IPaymentData,
+    IPaymentRequest,
     IPermission,
+    IPlanSalesResponse,
+    IPostLimit,
+    IResume,
     IRole,
     ISkill,
     ISubscribers,
-    IPaymentRequest,
     ISubscription,
-    IPostLimit, IPaymentData, IPlanSalesDTO, IPlanSalesResponse,
-
+    IUser
 } from '@/types/backend';
 import axios from 'config/axios-customize';
 
@@ -102,6 +103,9 @@ export const callFetchCompany = (query: string) => {
 export const callFetchCompanyById = (id: string) => {
     return axios.get<IBackendRes<ICompany>>(`/api/v1/companies/${id}`);
 }
+export const callCountCompanies = () => {
+    return axios.get<IBackendRes<number>>('/api/v1/companies/count');
+}
 
 /**
  * 
@@ -155,6 +159,10 @@ export const callFetchPostCountByUserId = (id: string) => {
     return axios.get<IBackendRes<number>>(`/api/v1/users/post_count/${id}`);
 };
 
+export const callCountUsers = () => {
+    return axios.get<IBackendRes<number>>('/api/v1/users/count');
+}
+
 /**
  * 
 Module Job
@@ -189,6 +197,9 @@ export const callFetchJobsByLocation = (location: string) => {
 
 export const callFetchRandomJobs = () => {
     return axios.get<IBackendRes<IModelPaginate<IJob>>>('/api/v1/jobs/random');
+}
+export const callCountJobs = () => {
+    return axios.get<IBackendRes<number>>('/api/v1/jobs/count');
 }
 
 /**
@@ -237,6 +248,10 @@ export const callFetchResumeByUser = () => {
 
 export const callFetchResumesByHRUserId = (userId: string) => {
     return axios.get<IBackendRes<IModelPaginate<IResume>>>(`/api/v1/resumes/by-hr/${userId}`);
+}
+
+export const callCountResumes = () => {
+    return axios.get<IBackendRes<number>>('/api/v1/resumes/count');
 }
 
 
@@ -400,6 +415,9 @@ export const callGetPaymentPlanSales = (year: number) => {
     });
 };
 
+export const callGetTotalPricePaymentSuccess = () => {
+    return axios.get<IBackendRes<{ code: string; data: number; message: string }>>('/api/v1/payments/total-price');
+}
 
 
 ``
