@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '@/redux/hooks';
 import { fetchAccount } from '@/redux/slice/accountSlide';
 import { message, Spin } from 'antd';
-
+import { toast } from 'react-toastify';
 const OAuthCallback = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -24,28 +24,28 @@ const OAuthCallback = () => {
 
                     if (result?.user) {
                         if (isFirstRender.current) {
-                            message.success(`Đăng nhập ${provider} thành công!`);
+                            toast.success(`Đăng nhập ${provider} thành công!`);
                             isFirstRender.current = false;
                         }
                         navigate('/');
                     } else {
-                        message.error('Đã có lỗi xảy ra!');
+                        toast.error('Đã có lỗi xảy ra!');
                         navigate('/login');
                     }
                 } else {
-                    message.error('Không tìm thấy token!');
+                    toast.error('Đã có lỗi xảy ra!');
                     navigate('/login');
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                message.error('Đã có lỗi xảy ra trong quá trình đăng nhập!');
+                toast.error('Đã có lỗi xảy ra trong quá trình đăng nhập!');
                 navigate('/login');
             }
         };
 
         // Set timeout để tránh loading vô tận
         const timeoutId = setTimeout(() => {
-            message.error('Quá thời gian xử lý, vui lòng thử đăng nhập lại');
+            toast.error('Quá thời gian xử lý, vui lòng thử đăng nhập lại');
             navigate('/login');
         }, 15000); // 15 seconds timeout
 

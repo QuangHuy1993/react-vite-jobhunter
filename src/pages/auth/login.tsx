@@ -1,15 +1,17 @@
-import { Button, Divider, Form, Input, message, notification } from 'antd';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { callLogin } from 'config/api';
-import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { setUserLoginInfo } from '@/redux/slice/accountSlide';
-import styles from 'styles/auth.module.scss';
-import { useAppSelector } from '@/redux/hooks';
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
-import { motion } from "framer-motion";
 import LoadingSpinner from '@/components/share/LoadingSpinner';
+import { useAppSelector } from '@/redux/hooks';
+import { setUserLoginInfo } from '@/redux/slice/accountSlide';
+import { Button, Divider, Form, Input } from 'antd';
+import { callLogin } from 'config/api';
+import { motion } from "framer-motion";
+import { useEffect, useState } from 'react';
+import { FaFacebook } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import { useDispatch } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import styles from 'styles/auth.module.scss';
+
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -50,15 +52,10 @@ const LoginPage = () => {
         if (res?.data) {
             localStorage.setItem('access_token', res.data.access_token);
             dispatch(setUserLoginInfo(res.data.user))
-            message.success('Đăng nhập tài khoản thành công!');
+            toast.success('Đăng nhập tài khoản thành công!');
             window.location.href = callback ? callback : '/';
         } else {
-            notification.error({
-                message: "Có lỗi xảy ra",
-                description:
-                    res.message && Array.isArray(res.message) ? res.message[0] : res.message,
-                duration: 5
-            })
+            toast.error(res.message && Array.isArray(res.message) ? res.message[0] : res.message);
         }
     };
 
@@ -68,7 +65,7 @@ const LoginPage = () => {
             <div className={styles["login-page"]}>
                 <main className={styles.main}>
                     <div className={styles.container}>
-                        <motion.section 
+                        <motion.section
                             className={styles.wrapper}
                             initial="hidden"
                             animate="visible"
@@ -85,21 +82,21 @@ const LoginPage = () => {
                                 autoComplete="off"
                             >
                                 <Form.Item
-                                    labelCol={{span: 24}}
+                                    labelCol={{ span: 24 }}
                                     label="Email"
                                     name="username"
-                                    rules={[{required: true, message: 'Email không được để trống!'}]}
+                                    rules={[{ required: true, message: 'Email không được để trống!' }]}
                                 >
-                                    <Input/>
+                                    <Input />
                                 </Form.Item>
 
                                 <Form.Item
-                                    labelCol={{span: 24}}
+                                    labelCol={{ span: 24 }}
                                     label="Mật khẩu"
                                     name="password"
-                                    rules={[{required: true, message: 'Mật khẩu không được để trống!'}]}
+                                    rules={[{ required: true, message: 'Mật khẩu không được để trống!' }]}
                                 >
-                                    <Input.Password/>
+                                    <Input.Password />
                                 </Form.Item>
 
                                 <Form.Item>
@@ -108,7 +105,7 @@ const LoginPage = () => {
                                     </Button>
                                 </Form.Item>
                                 <Divider>Hoặc sử dụng</Divider>
-                                <motion.div 
+                                <motion.div
                                     className={styles["social-buttons"]}
                                     variants={socialButtonsVariants}
                                     initial="hidden"
@@ -134,7 +131,7 @@ const LoginPage = () => {
                                             fontWeight: 500
                                         }}
                                     >
-                                        <FcGoogle size={20} style={{marginRight: '8px'}}/>
+                                        <FcGoogle size={20} style={{ marginRight: '8px' }} />
                                         Google
                                     </Button>
 
@@ -158,7 +155,7 @@ const LoginPage = () => {
                                             fontWeight: 500
                                         }}
                                     >
-                                        <FaFacebook size={20} style={{marginRight: '8px'}}/>
+                                        <FaFacebook size={20} style={{ marginRight: '8px' }} />
                                         Facebook
                                     </Button>
                                 </motion.div>

@@ -14,6 +14,7 @@ import ViewDetailUser from "@/components/admin/user/view.user";
 import Access from "@/components/share/access";
 import { ALL_PERMISSIONS } from "@/config/permissions";
 import { sfLike } from "spring-filter-query-builder";
+import { toast } from 'react-toastify';
 
 const UserPage = () => {
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -31,7 +32,7 @@ const UserPage = () => {
         if (id) {
             const res = await callDeleteUser(id);
             if (+res.statusCode === 200) {
-                message.success('Xóa User thành công');
+                toast.success('Xóa User thành công');
                 reloadTable();
             } else {
                 notification.error({

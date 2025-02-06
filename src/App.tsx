@@ -1,3 +1,20 @@
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import LayoutAdmin from 'components/admin/layout.admin';
+import Footer from 'components/client/footer.client';
+import Header from 'components/client/header.client';
+import OAuthCallback from "components/client/oauth-callback";
+import NotFound from 'components/share/not.found';
+import ProtectedRoute from 'components/share/protected-route.ts';
+import PostLimitPage from "pages/admin/post-limit";
+import PaymentPage from "pages/admin/statistical/payment";
+import RevenueStatistics from "pages/admin/statistical/revenueStatistics";
+import ForgetPassword from 'pages/auth/forgetPassword';
+import LoginPage from 'pages/auth/login';
+import RegisterPage from 'pages/auth/register';
+import HomePage from 'pages/home';
+import DonatePage from "pages/home/donate";
 import { useEffect, useRef, useState } from 'react';
 import {
   createBrowserRouter,
@@ -5,40 +22,28 @@ import {
   RouterProvider,
   useLocation,
 } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import NotFound from 'components/share/not.found';
-import LoginPage from 'pages/auth/login';
-import RegisterPage from 'pages/auth/register';
-import LayoutAdmin from 'components/admin/layout.admin';
-import ProtectedRoute from 'components/share/protected-route.ts';
-import Header from 'components/client/header.client';
-import Footer from 'components/client/footer.client';
-import HomePage from 'pages/home';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styles from 'styles/app.module.scss';
-import DashboardPage from './pages/admin/dashboard';
+import ViewUpsertJob from './components/admin/job/upsert.job';
+import MyJobs from './components/client/profile/MyJob';
+import ProfileAccount from './components/client/profile/ProfileAccount';
+import LayoutApp from './components/share/layout.app';
 import CompanyPage from './pages/admin/company';
+import DashboardPage from './pages/admin/dashboard';
+import JobTabs from './pages/admin/job/job.tabs';
 import PermissionPage from './pages/admin/permission';
 import ResumePage from './pages/admin/resume';
 import RolePage from './pages/admin/role';
 import UserPage from './pages/admin/user';
-import { fetchAccount } from './redux/slice/accountSlide';
-import LayoutApp from './components/share/layout.app';
-import ViewUpsertJob from './components/admin/job/upsert.job';
-import ClientJobPage from './pages/job';
-import ClientJobDetailPage from './pages/job/detail';
 import ClientCompanyPage from './pages/company';
 import ClientCompanyDetailPage from './pages/company/detail';
-import JobTabs from './pages/admin/job/job.tabs';
-import OAuthCallback from "components/client/oauth-callback";
-import ForgetPassword from 'pages/auth/forgetPassword';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import DonatePage from "pages/home/donate";
-import PostLimitPage from "pages/admin/post-limit";
-import PaymentPage from "pages/admin/statistical/payment";
-import RevenueStatistics from "pages/admin/statistical/revenueStatistics";
-
-
+import ClientJobPage from './pages/job';
+import ClientJobDetailPage from './pages/job/detail';
+import { fetchAccount } from './redux/slice/accountSlide';
+import ManageAccount from './components/client/modal/manage.account';
+import EmailSubscription from './components/client/profile/EmailSubscription';
+import Settings from './components/client/profile/Settings';
 const LayoutClient = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
@@ -73,7 +78,7 @@ export default function App() {
     if (
       window.location.pathname === '/login'
       || window.location.pathname === '/register'
-        || window.location.pathname === '/forget-password'
+      || window.location.pathname === '/forget-password'
 
     )
       return;
@@ -83,6 +88,26 @@ export default function App() {
 
 
   const router = createBrowserRouter([
+    {
+      path: "/profile/settings",
+      element: <Settings />
+    },
+    {
+      path: "/profile/email-subscription",
+      element: <EmailSubscription />
+    },
+    {
+      path: "/manage-account",
+      element: <ManageAccount open={true} onClose={() => {}} />
+    },
+    {
+      path: "/profile",
+      element: <ProfileAccount />
+    },
+    {
+      path: "/profile/my-jobs",
+      element: <MyJobs />
+    },
     {
       path: "/donate",
       element: <DonatePage />
@@ -139,10 +164,10 @@ export default function App() {
             </ProtectedRoute>
         },
         {
-          path:"/admin/post-limit",
+          path: "/admin/post-limit",
           element:
             <ProtectedRoute>
-                <PostLimitPage />
+              <PostLimitPage />
             </ProtectedRoute>
         },
 
@@ -213,6 +238,7 @@ export default function App() {
   return (
     <>
       <RouterProvider router={router} />
+      <ToastContainer />
     </>
   )
 }

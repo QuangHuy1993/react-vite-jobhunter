@@ -12,23 +12,23 @@ import {
     MenuFoldOutlined,
     RiseOutlined,
     TwitterOutlined,
+
 } from '@ant-design/icons';
-import { Avatar, ConfigProvider, Drawer, Dropdown, Menu, MenuProps, Space } from 'antd';
-import SearchClient from "components/client/search.client";
+import { Avatar, ConfigProvider, Drawer, Dropdown, Menu, MenuProps, Space, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import logoImage from '../../assets/Logooo.png';
-import ManageAccount from './modal/manage.account';
+import logoImage from '../../../assets/Logooo.png';
+import ManageAccount from '../modal/manage.account';
 
 
 interface HeaderProps {
     searchTerm: string;
+    className?: string;
     setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
+const HeaderWithoutSearch = ({ searchTerm, setSearchTerm, className }: HeaderProps) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
@@ -66,19 +66,7 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
         fetchSkills();
     }, []);
 
-    // const skillItems = skills.map(skill => ({
-    //     label: (
-    //         <div
-    //             onClick={() => {
-    //                 navigate(`/job?skills=${skill.id}`);
-    //             }}
-    //             style={{ textDecoration: 'none', color: 'white', cursor: 'pointer' }}
-    //         >
-    //             {skill.name}
-    //         </div>
-    //     ),
-    //     key: `/job/skills/${skill.id}`,
-    // }));
+    
     const skillItems = skills.map(skill => ({
         label: (
             <Link
@@ -170,7 +158,7 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
         const res = await callLogout();
         if (res && res && +res.statusCode === 200) {
             dispatch(setLogoutAction({}));
-            toast.success('Đăng xuất thành công');
+            message.success('Đăng xuất thành công');
             navigate('/')
         }
     }
@@ -208,7 +196,7 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
 
     return (
         <>
-            <div className={styles["header-container"]}>
+            <div className={`${styles['header-container']} ${className}`}>
                 <div className={styles["header-section"]}>
                     <div className={styles["container"]}>
                         {!isMobile ? (
@@ -282,11 +270,7 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
                         )}
                     </div>
                 </div>
-                <div className={styles["search-section"]}>
-                    <div className={styles["container"]}>
-                        <SearchClient />
-                    </div>
-                </div>
+                
             </div>
 
             <Drawer
@@ -310,4 +294,4 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
     );
 };
 
-export default Header;
+export default HeaderWithoutSearch;

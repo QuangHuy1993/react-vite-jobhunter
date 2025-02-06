@@ -5,6 +5,7 @@ import { callRegister } from 'config/api';
 import styles from 'styles/auth.module.scss';
 import { IUser } from '@/types/backend';
 const { Option } = Select;
+import { toast } from 'react-toastify';
 
 
 const RegisterPage = () => {
@@ -17,7 +18,7 @@ const RegisterPage = () => {
         const res = await callRegister(name, email, password as string, +age, gender, address);
         setIsSubmit(false);
         if (res?.data?.id) {
-            message.success('Đăng ký tài khoản thành công!');
+            toast.success('Đăng ký tài khoản thành công!');
             navigate('/login')
         } else {
             notification.error({
