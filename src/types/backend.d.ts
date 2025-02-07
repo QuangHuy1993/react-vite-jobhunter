@@ -172,7 +172,7 @@ export interface ISubscribers {
     id?: string;
     name?: string;
     email?: string;
-    skills: string[];
+    skills: { id: number }[];
     createdBy?: string;
     isDeleted?: boolean;
     deletedAt?: boolean | null;
