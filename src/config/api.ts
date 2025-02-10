@@ -15,7 +15,8 @@ import {
     ISkill,
     ISubscribers,
     ISubscription,
-    IUser
+    IUser,
+    ResumeDetailDTO
 } from '@/types/backend';
 import axios from 'config/axios-customize';
 
@@ -202,6 +203,25 @@ export const callCountJobs = () => {
     return axios.get<IBackendRes<number>>('/api/v1/jobs/count');
 }
 
+
+
+export const callSaveJob = (userId: number, jobId: number) => {
+    return axios.post<IBackendRes<boolean>>('/api/v1/user-saved-jobs', null, {
+        params: { userId, jobId }
+    });
+}
+
+export const callCheckSavedJob = (userId: number, jobId: number) => {
+    return axios.get<IBackendRes<boolean>>('/api/v1/user-saved-jobs/check', {
+        params: { userId, jobId }
+    });
+}
+
+export const callToggleSavedJob = (userId: number, jobId: number) => {
+    return axios.put<IBackendRes<boolean>>('/api/v1/user-saved-jobs/toggle', null, {
+        params: { userId, jobId }
+    });
+}
 /**
  * Fetch jobs by HR user ID
  */
@@ -253,7 +273,9 @@ export const callFetchResumesByHRUserId = (userId: string) => {
 export const callCountResumes = () => {
     return axios.get<IBackendRes<number>>('/api/v1/resumes/count');
 }
-
+export const callFetchResumeDetails = () => {
+    return axios.get<IBackendRes<ResumeDetailDTO[]>>('/api/v1/resumes/details');
+}
 
 
 /**

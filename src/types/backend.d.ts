@@ -139,6 +139,20 @@ export interface IResume {
     updatedAt?: string;
 }
 
+export interface ResumeDetailDTO {
+    url: string;
+    status: string;
+    createdAt: string;
+    level: string;
+    location: string;
+    jobName: string;
+    jobId: number;
+    salary: number;
+    companyName: string;
+    companyLogo: string;
+    skillNames: string[];
+}
+
 export interface IPermission {
     id?: string;
     name?: string;

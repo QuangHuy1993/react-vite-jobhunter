@@ -626,25 +626,44 @@ $gradient-light: linear-gradient(to right bottom,
         font-size: 27px;
     }
 
-    .btn-apply {
-        width: 100%;
-        cursor: pointer;
-        text-align: center;
-        color: #fff;
-        text-decoration: none;
-        -webkit-font-smoothing: antialiased;
-        font-size: 20px;
-        padding: 10px 15px;
-        border: 0;
-        border-radius: 5px;
-        background-color: #ea1e30;
-        -webkit-font-smoothing: antialiased;
-        outline: 0;
+   .apply-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
-        &:hover {
-            background-color: #d82727;
-        }
+.btn-apply {
+    flex-grow: 1;
+    cursor: pointer;
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 12px 15px;
+    border: 0;
+    border-radius: 5px;
+    background-color: #ea1e30;
+    outline: 0;
+
+    &:hover {
+        background-color: #d82727;
     }
+}
+
+.favorite-icon {
+    margin-left: 10px;
+    color: #EA3323;
+    cursor: pointer;
+    font-size: 50px; 
+    padding: 8px;
+    border: 1px solid #EA3323;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px; 
+    height: 50px; 
+}
 
     .salary {
         padding: 15px 0;

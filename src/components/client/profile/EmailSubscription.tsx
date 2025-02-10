@@ -1,6 +1,6 @@
 import HeaderWithoutSearch from '@/components/client/profile/header.withprofile';
 import ProfileSidebar from '@/components/client/profile/ProfileSidebar';
-import { callFetchAllSkill, callGetSubscriberSkills, callUpdateSubscriber } from '@/config/api';
+import { callCreateSubscriber, callFetchAllSkill, callGetSubscriberSkills, callUpdateSubscriber } from '@/config/api';
 import { useAppSelector } from "@/redux/hooks";
 import styles from '@/styles/profile.module.scss';
 import { ISubscribers } from '@/types/backend';
@@ -100,10 +100,21 @@ const EmailSubscription: React.FC = () => {
             const updatedSkills = [...skills, ...newSkills];
 
             try {
-                const res = await callUpdateSubscriber({
-                    id: subscriber?.id,
-                    skills: updatedSkills.map(skill => ({ id: Number(skill.id) }))
-                });
+                let res;
+                if (subscriber) {
+                    // Nếu đã có subscriber, sử dụng API update
+                    res = await callUpdateSubscriber({
+                        id: subscriber.id,
+                        skills: updatedSkills.map(skill => ({ id: Number(skill.id) }))
+                    });
+                } else {
+                    // Nếu chưa có subscriber, sử dụng API create
+                    res = await callCreateSubscriber({
+                        email: user.email,
+                        name: user.name,
+                        skills: updatedSkills.map(skill => ({ id: Number(skill.id) }))
+                    });
+                }
 
                 if (res.data) {
                     setSkills(updatedSkills as { id: string; name: string }[]);
