@@ -1,22 +1,45 @@
+import { callGetCurrentUser } from '@/config/api';
 import styles from '@/styles/profile.module.scss';
-import React from 'react';
+import { IUser } from '@/types/backend';
+import React, { useEffect, useState } from 'react';
 import { CgProfile } from "react-icons/cg";
 import { CiBoxList, CiSettings } from "react-icons/ci";
 import { MdOutlineMarkEmailRead } from "react-icons/md";
 import { Link } from 'react-router-dom';
-
 interface ProfileSidebarProps {
     activePage: 'profile' | 'my-jobs' | 'email-subscription' | 'settings';
 }
 
 const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ activePage }) => {
+    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchCurrentUser = async () => {
+            try {
+                setLoading(true);
+                const res = await callGetCurrentUser();
+                if (res.data) {
+                    setCurrentUser(res.data);
+                }
+            } catch (error) {
+                console.error("Lỗi khi lấy thông tin người dùng:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCurrentUser();
+    }, []);
     return (
         <div className={styles['profile-sidebar']}>
             <div className={styles['profile-greeting']}>
                 <span className={styles['greeting-icon']}>👋</span>
                 <div>
                     <div>Xin chào</div>
-                    <div className={styles['user-name']}>Quang Huy</div>
+                    <div className={styles['user-name']}>
+                        {loading ? 'Đang tải...' : (currentUser?.name || 'Người dùng')}
+                    </div>
                 </div>
             </div>
 

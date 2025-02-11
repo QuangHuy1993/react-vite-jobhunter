@@ -50,6 +50,9 @@ const UserUpdateInfo = () => {
                 post_count: 0,
                 id: user.id,
                 email: values.email,
+                phoneNumber: values.phoneNumber,
+                urlAvatar: values.urlAvatar,
+                urlProfile: values.urlProfile,
                 name: values.name,
                 age: values.age,
                 gender: values.gender,
@@ -74,6 +77,7 @@ const UserUpdateInfo = () => {
         }
         setLoading(false);
     };
+
 
     return (
         <div style={{ maxWidth: 800, margin: '0 auto' }}>

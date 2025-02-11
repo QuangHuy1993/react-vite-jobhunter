@@ -68,6 +68,9 @@ export interface IUser {
     email: string;
     password?: string;
     age: number;
+    phoneNumber: string;
+    urlAvatar: string;
+    urlProfile: string;
     gender: string;
     address: string;
     post_count?: number;
@@ -79,6 +82,7 @@ export interface IUser {
     company?: {
         id: string;
         name: string;
+        logo: string;
     }
     createdBy?: string;
     isDeleted?: boolean;

@@ -142,6 +142,17 @@ export const callUpdateUser = (user: IUser) => {
     return axios.put<IBackendRes<IUser>>(`/api/v1/users/update`, { ...user })
 }
 
+// Thêm API upload ảnh
+export const callUploadProfileImage = (userId: number|string, file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return axios.put<IBackendRes<IUser>>(`/api/v1/users/${userId}/profile-image`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+    });
+}
+
 export const callDeleteUser = (id: string) => {
     return axios.delete<IBackendRes<IUser>>(`/api/v1/users/${id}`);
 }
@@ -164,6 +175,14 @@ export const callCountUsers = () => {
     return axios.get<IBackendRes<number>>('/api/v1/users/count');
 }
 
+export const callGetCurrentUser = () => {
+    return axios.get<IBackendRes<IUser>>('/api/v1/users/me');
+}
+
+
+export const callDeleteProfileImage = (userId: string | number) => {
+    return axios.delete<IBackendRes<IUser>>(`/api/v1/users/${userId}/profile-image`);
+}
 /**
  * 
 Module Job

@@ -23,6 +23,7 @@ interface IState {
         id: string;
         email: string;
         name: string;
+        urlAvatar?: string;
         role: {
             id?: string;
             name?: string;

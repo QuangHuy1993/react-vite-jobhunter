@@ -1,8 +1,8 @@
-import { callFetchAllSkill, callLogout } from '@/config/api';
+import { callFetchAllSkill, callGetCurrentUser, callLogout } from '@/config/api';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setLogoutAction } from '@/redux/slice/accountSlide';
 import styles from '@/styles/client.module.scss';
-import { IBackendRes, IModelPaginate, ISkill } from "@/types/backend";
+import { IBackendRes, IModelPaginate, ISkill, IUser } from "@/types/backend";
 import {
     CodeOutlined,
     ContactsOutlined,
@@ -38,6 +38,7 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
     const [current, setCurrent] = useState('home');
     const [openMangeAccount, setOpenManageAccount] = useState<boolean>(false);
     const location = useLocation();
+    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
     const [skills, setSkills] = useState<ISkill[]>([]);
 
     const handleManageAccount = () => {
@@ -45,6 +46,20 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
         navigate('/profile');
     };
 
+    useEffect(() => {
+        const fetchCurrentUser = async () => {
+            try {
+                const res = await callGetCurrentUser();
+                if (res.data) {
+                    setCurrentUser(res.data);
+                }
+            } catch (error) {
+                console.error("Error fetching current user:", error);
+            }
+        };
+
+        fetchCurrentUser();
+    }, []);
 
     useEffect(() => {
         // Chỉ lấy path gốc, không bao gồm các path con
@@ -65,20 +80,6 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
         };
         fetchSkills();
     }, []);
-
-    // const skillItems = skills.map(skill => ({
-    //     label: (
-    //         <div
-    //             onClick={() => {
-    //                 navigate(`/job?skills=${skill.id}`);
-    //             }}
-    //             style={{ textDecoration: 'none', color: 'white', cursor: 'pointer' }}
-    //         >
-    //             {skill.name}
-    //         </div>
-    //     ),
-    //     key: `/job/skills/${skill.id}`,
-    // }));
     const skillItems = skills.map(skill => ({
         label: (
             <Link
@@ -262,8 +263,12 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
                                         ) : (
                                             <Dropdown menu={{ items: itemsDropdown }} trigger={['click']}>
                                                 <Space style={{ cursor: "pointer" }}>
-                                                    <span>Xin chào {user?.name}</span>
-                                                    <Avatar>{user?.name?.substring(0, 2)?.toUpperCase()}</Avatar>
+                                                    <span>Xin chào {currentUser?.name || user?.name}</span>
+                                                    {currentUser?.urlAvatar ? (
+                                                        <Avatar src={currentUser.urlAvatar} />
+                                                    ) : (
+                                                        <Avatar>{(currentUser?.name || user?.name)?.substring(0, 2)?.toUpperCase()}</Avatar>
+                                                    )}
                                                 </Space>
                                             </Dropdown>
                                         )}
