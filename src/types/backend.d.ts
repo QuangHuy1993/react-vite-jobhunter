@@ -116,6 +116,28 @@ export interface IJob {
     updatedAt?: string;
 }
 
+export interface IJobSaves {
+    company: {
+        id: number;
+        name: string;
+        logo: string;
+    };
+    job: {
+        id: number;
+        name: string;
+        location: string;
+        salary: number;
+        level: string;
+        startDate: string;
+        endDate: string;
+    };
+    skills: {
+        id: number;
+        name: string;
+    }[];
+    status: string;
+    
+}
 export interface IResume {
     id?: string;
     email: string;

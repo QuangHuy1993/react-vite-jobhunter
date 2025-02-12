@@ -38,7 +38,7 @@ const Settings: React.FC = () => {
                     <div className={styles['settings-section']}>
                         <h2>Xoá tài khoản</h2>
                         <p>
-                            Thao tác xoá tài khoản là vĩnh viễn và không thể hoàn tác. Nếu bạn xoá tài khoản vì nhận quá nhiều email từ ITviec, bạn có thể huỷ đăng ký email <Link to="/profile/email-subscription">tại đây</Link>.
+                            Thao tác xoá tài khoản là vĩnh viễn và không thể hoàn tác. Nếu bạn xoá tài khoản vì nhận quá nhiều email từ Jobhunter, bạn có thể huỷ đăng ký email <Link to="/profile/email-subscription">tại đây</Link>.
                         </p>
                         <div className={styles['delete-account-container']}>
                             <button className={styles['delete-account-btn']}>Xoá tài khoản</button>

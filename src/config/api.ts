@@ -16,7 +16,8 @@ import {
     ISubscribers,
     ISubscription,
     IUser,
-    ResumeDetailDTO
+    ResumeDetailDTO,
+    IJobSaves
 } from '@/types/backend';
 import axios from 'config/axios-customize';
 
@@ -241,6 +242,11 @@ export const callToggleSavedJob = (userId: number, jobId: number) => {
         params: { userId, jobId }
     });
 }
+export const callFetchSavedJobsByUserId = (userId: number | string) => {
+    return axios.get<IBackendRes<IJobSaves[]>>(`/api/v1/user-saved-jobs?userId=${userId}`);
+}
+
+
 /**
  * Fetch jobs by HR user ID
  */
