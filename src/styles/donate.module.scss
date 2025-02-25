@@ -1,0 +1,694 @@
+// Biến màu sắc
+$color-primary: #2a41e8;
+$color-secondary: #f0f2f5;
+$color-success: #28a745;
+$color-warning: #ffc107;
+$color-danger: #dc3545;
+$color-light: #f8f9fa;
+$color-dark: #343a40;
+$color-premium: #ffd700;
+$color-basic: #4a90e2;
+$color-diamond: #1ed0e4;
+$color-free: #82ca9d;
+$color-text: #333;
+$color-white: #fff;
+$color-vip: #991B1B;
+$color-vip-light: #FFF0F0;
+$color-vip-accent: #F87171;
+
+// Gradient backgrounds
+$gradient-premium: linear-gradient(135deg, #ffd700, #ffbc00);
+$gradient-basic: linear-gradient(135deg, #4a90e2, #3676c7);
+$gradient-diamond: linear-gradient(135deg, #1ed0e4, #0cb8cc);
+$gradient-free: linear-gradient(135deg, #82ca9d, #5bb17f);
+$gradient-vip: linear-gradient(135deg, #991B1B, #7F1D1D);
+
+// Shadows
+$box-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+$box-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+$box-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+$box-shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+$box-shadow-vip: 0 10px 25px rgba(153, 27, 27, 0.25);
+
+// Mixins
+@mixin transition($property: all, $duration: 0.3s, $timing: ease) {
+  transition: $property $duration $timing;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin card-hover {
+  transform: translateY(-10px);
+  box-shadow: $box-shadow-hover;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+  }
+}
+
+// VIP Modal specific animations
+@keyframes slideInRight {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes highlight {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba($color-vip-light, 0.8);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+// Main styles
+.donateContainer {
+  background-color: $color-secondary;
+  min-height: 100vh;
+  padding-bottom: 60px;
+  color: $color-text;
+}
+
+.headerSection {
+  background-color: $color-white;
+  box-shadow: $box-shadow-sm;
+  padding: 20px 0;
+  margin-bottom: 40px;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  .headerFlex {
+    @include flex-between;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .backButton {
+    background-color: $color-primary;
+    color: $color-white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    @include transition;
+    
+    &:hover {
+      background-color: darken($color-primary, 10%);
+      transform: translateX(-3px);
+    }
+
+    &:active {
+      transform: translateX(-1px);
+    }
+  }
+}
+
+.mainContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.titleSection {
+  text-align: center;
+  margin-bottom: 50px;
+  animation: fadeIn 0.8s ease-out;
+  
+  h1 {
+    font-size: 2.5rem;
+    color: $color-primary;
+    margin-bottom: 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: $color-dark;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+}
+
+.crownIcon {
+  color: $color-premium;
+  font-size: 2.5rem;
+  animation: pulse 2s infinite;
+}
+
+.planCard {
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: $color-white;
+  box-shadow: $box-shadow-md;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  @include transition(all, 0.4s, cubic-bezier(0.175, 0.885, 0.32, 1.275));
+  animation: fadeIn 0.6s forwards;
+  animation-delay: calc(var(--delay) * 0.15s);
+  opacity: 1; // Đã sửa: Đặt opacity là 1 thay vì 0 để tránh biến mất
+  
+  &:hover {
+    @include card-hover;
+  }
+  
+  .planTitle {
+    @include flex-between;
+    margin-bottom: 10px;
+    
+    :global(.ant-tag) {
+      padding: 4px 8px;
+      font-weight: bold;
+    }
+  }
+  
+  .price {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: $color-primary;
+  }
+  
+  .features {
+    margin-bottom: 25px;
+    flex-grow: 1;
+    
+    p {
+      margin-bottom: 12px;
+      padding-left: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.5;
+    }
+  }
+  
+  .checkIcon {
+    color: $color-success;
+    margin-top: 3px;
+    font-size: 1rem;
+  }
+}
+
+// Sửa lại phần button để hiển thị đầy đủ
+.purchaseButton {
+  width: 100%;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 6px;
+  @include transition;
+  margin-top: auto; // Đảm bảo button nằm ở dưới cùng
+  height: auto !important; // Đặt chiều cao là auto
+  line-height: 1.5 !important; // Đặt line-height phù hợp
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-3px);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(-1px);
+  }
+}
+
+.premiumCard {
+  border: 2px solid $color-premium;
+  position: relative;
+  z-index: 1; // Đã thêm: đảm bảo card premium có z-index cao hơn
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: $gradient-premium;
+  }
+  
+  // Đã sửa: thay thế animation glow bằng box-shadow tĩnh khi hover
+  &:hover {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-10px);
+  }
+  
+  .planTitle {
+    color: darken($color-premium, 15%);
+  }
+  
+  .price {
+    color: darken($color-premium, 15%);
+  }
+  
+  // Sửa lại style cho button của premium
+  .purchaseButton {
+    background: $gradient-premium;
+    border: none;
+    color: $color-dark;
+    height: auto !important;
+    display: block;
+    width: 100%;
+    
+    &:hover:not(:disabled) {
+      background: darken($color-premium, 5%);
+      color: $color-dark;
+    }
+  }
+}
+
+.basicPlan {
+  border: 2px solid $color-basic;
+  position: relative;
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: $gradient-basic;
+  }
+  
+  .planTitle {
+    color: $color-basic;
+  }
+  
+  .price {
+    color: $color-basic;
+  }
+  
+  // Sửa lại style cho button của basic
+  .purchaseButton {
+    background: $gradient-basic;
+    border: none;
+    color: $color-white;
+    height: auto !important;
+    display: block;
+    width: 100%;
+    
+    &:hover:not(:disabled) {
+      background: darken($color-basic, 5%);
+      color: $color-white;
+    }
+  }
+}
+
+.diamondPlan {
+  border: 2px solid $color-diamond;
+  position: relative;
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: $gradient-diamond;
+  }
+  
+  .planTitle {
+    color: $color-diamond;
+  }
+  
+  .price {
+    color: $color-diamond;
+  }
+  
+  // Sửa lại style cho button của diamond
+  .purchaseButton {
+    background: $gradient-diamond;
+    border: none;
+    color: $color-white;
+    height: auto !important;
+    display: block;
+    width: 100%;
+    
+    &:hover:not(:disabled) {
+      background: darken($color-diamond, 5%);
+      color: $color-white;
+    }
+  }
+}
+
+.freePlan {
+  border: 2px solid $color-free;
+  position: relative;
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: $gradient-free;
+  }
+  
+  .planTitle {
+    color: $color-free;
+  }
+  
+  .price {
+    color: $color-free;
+  }
+  
+  // Sửa lại style cho button của free
+  .purchaseButton {
+    background: $gradient-free;
+    border: none;
+    color: $color-dark;
+    height: auto !important;
+    display: block;
+    width: 100%;
+    
+    &:hover:not(:disabled) {
+      background: darken($color-free, 5%);
+      color: $color-dark;
+    }
+  }
+}
+
+// Ghi đè một số style của Ant Design để đảm bảo button hiển thị đúng
+:global(.ant-btn) {
+  height: auto;
+  line-height: 1.5;
+  white-space: normal;
+  padding: 8px 16px;
+}
+
+.subscriptionInfo {
+  margin-top: 50px;
+  padding: 25px;
+  background-color: $color-white;
+  border-radius: 12px;
+  box-shadow: $box-shadow-md;
+  animation: fadeIn 0.8s ease-out;
+  animation-delay: 0.6s;
+  opacity: 1; // Đảm bảo luôn hiển thị
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $color-primary;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .expiryDate {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    
+    .planName {
+      font-size: 1.2rem;
+      font-weight: bold;
+      background-color: rgba($color-premium, 0.2);
+      padding: 5px 12px;
+      border-radius: 20px;
+      color: darken($color-premium, 20%);
+    }
+    
+    .expireDate {
+      font-size: 1rem;
+      
+      strong {
+        margin-right: 5px;
+      }
+    }
+  }
+  
+  .expirationWarning {
+    margin-top: 15px;
+    background-color: rgba($color-warning, 0.15);
+    padding: 10px 15px;
+    border-radius: 6px;
+    border-left: 4px solid $color-warning;
+    
+    .warningText {
+      color: darken($color-warning, 25%);
+      font-weight: 500;
+    }
+  }
+}
+
+// VIP Payment Modal Styles
+.vipModal {
+  :global(.ant-modal-content) {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: $box-shadow-vip;
+  }
+
+  :global(.ant-modal-header) {
+    background-color: $color-vip-light;
+    padding: 18px 24px;
+    border-bottom: 2px solid rgba($color-vip, 0.1);
+  }
+
+  :global(.ant-modal-title) {
+    font-weight: 700;
+  }
+
+  :global(.ant-modal-body) {
+    padding: 24px;
+  }
+
+  :global(.ant-modal-footer) {
+    border-top: 1px solid rgba($color-vip, 0.1);
+    padding: 16px 24px;
+  }
+
+  :global(.ant-btn-default) {
+    border-color: $color-vip;
+    color: $color-vip;
+
+    &:hover {
+      color: lighten($color-vip, 10%);
+      border-color: lighten($color-vip, 10%);
+      background-color: rgba($color-vip, 0.05);
+    }
+  }
+
+  :global(.ant-select-selector) {
+    border-radius: 8px !important;
+    border: 1px solid rgba($color-vip, 0.3) !important;
+    
+    &:hover {
+      border-color: $color-vip !important;
+    }
+  }
+
+  :global(.ant-select-focused .ant-select-selector) {
+    border-color: $color-vip !important;
+    box-shadow: 0 0 0 2px rgba($color-vip, 0.2) !important;
+  }
+}
+
+.modalContent {
+  padding: 10px;
+}
+
+.planInfo {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: $color-vip-light;
+  border-radius: 12px;
+  border: 1px solid rgba($color-vip, 0.15);
+  
+  h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  
+  p {
+    font-size: 16px;
+    margin-bottom: 0;
+  }
+}
+
+.monthSelection {
+  @include flex-between;
+  margin: 20px 0;
+  padding: 12px 15px;
+  background-color: #F9F9F9;
+  border-radius: 10px;
+  
+  span {
+    font-weight: 600;
+    font-size: 16px;
+    color: $color-dark;
+  }
+  
+  :global(.ant-select) {
+    border-radius: 8px;
+  }
+}
+
+.priceBreakdown {
+  margin: 25px 0;
+  padding: 15px;
+  background-color: #FAFAFA;
+  border-radius: 12px;
+  border: 1px solid #EEEEEE;
+}
+
+.priceRow {
+  @include flex-between;
+  padding: 10px 0;
+  margin-bottom: 5px;
+  position: relative;
+  
+  &:not(:last-child) {
+    border-bottom: 1px dashed #EEEEEE;
+  }
+  
+  span {
+    font-size: 16px;
+    
+    &:first-child {
+      color: $color-dark;
+      font-weight: 500;
+    }
+    
+    &:last-child {
+      font-weight: 600;
+    }
+  }
+  
+  &.discount {
+    color: $color-vip-accent;
+    font-weight: 600;
+    padding-left: 8px;
+    border-left: 3px solid $color-vip-accent;
+    background-color: rgba($color-vip-accent, 0.05);
+    border-radius: 0 4px 4px 0;
+    margin: 10px 0;
+    padding: 10px;
+    animation: highlight 2s ease-in-out;
+  }
+}
+
+.totalPrice {
+  @include flex-between;
+  padding: 15px;
+  margin-top: 10px;
+  background: $gradient-vip;
+  border-radius: 10px;
+  color: $color-white;
+  
+  span {
+    font-size: 18px;
+    
+    &:first-child {
+      font-weight: 600;
+    }
+    
+    &:last-child {
+      font-size: 22px;
+      font-weight: 700;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .headerSection {
+    padding: 15px 0;
+    
+    .headerFlex {
+      justify-content: center;
+    }
+  }
+  
+  .titleSection {
+    h1 {
+      font-size: 1.8rem;
+    }
+    
+    p {
+      font-size: 1rem;
+    }
+  }
+  
+  .subscriptionInfo {
+    .expiryDate {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+  .monthSelection {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .vipModal {
+    :global(.ant-modal-body) {
+      padding: 15px;
+    }
+  }
+}

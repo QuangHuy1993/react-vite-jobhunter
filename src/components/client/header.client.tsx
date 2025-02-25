@@ -261,16 +261,32 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
                                         {isAuthenticated === false ? (
                                             <Link to={'/login'}>Đăng Nhập</Link>
                                         ) : (
-                                            <Dropdown menu={{ items: itemsDropdown }} trigger={['click']}>
-                                                <Space style={{ cursor: "pointer" }}>
-                                                    <span>Xin chào {currentUser?.name || user?.name}</span>
-                                                    {currentUser?.urlAvatar ? (
-                                                        <Avatar src={currentUser.urlAvatar} />
-                                                    ) : (
-                                                        <Avatar>{(currentUser?.name || user?.name)?.substring(0, 2)?.toUpperCase()}</Avatar>
-                                                    )}
-                                                </Space>
-                                            </Dropdown>
+                                            <Space size="large">
+                                                {/* Hiển thị "Nhà tuyển dụng" cho mọi người NGOẠI TRỪ người dùng có role là HR */}
+                                                {user?.role?.name !== 'HR' && (
+                                                    <Link
+                                                        to="employer"
+                                                        style={{
+                                                            fontWeight: 'bold',
+                                                            color: '#fff',
+                                                            marginRight: '15px',
+                                                            fontSize: '16px'
+                                                        }}
+                                                    >
+                                                        Nhà tuyển dụng
+                                                    </Link>
+                                                )}
+                                                <Dropdown menu={{ items: itemsDropdown }} trigger={['click']}>
+                                                    <Space style={{ cursor: "pointer" }}>
+                                                        <span>Xin chào {currentUser?.name || user?.name}</span>
+                                                        {currentUser?.urlAvatar ? (
+                                                            <Avatar src={currentUser.urlAvatar} />
+                                                        ) : (
+                                                            <Avatar>{(currentUser?.name || user?.name)?.substring(0, 2)?.toUpperCase()}</Avatar>
+                                                        )}
+                                                    </Space>
+                                                </Dropdown>
+                                            </Space>
                                         )}
                                     </div>
                                 </div>

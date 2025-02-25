@@ -4,6 +4,7 @@ import {
     ICompany,
     IGetAccount,
     IJob,
+    IJobSaves,
     IModelPaginate,
     IPaymentData,
     IPaymentRequest,
@@ -17,367 +18,451 @@ import {
     ISubscription,
     IUser,
     ResumeDetailDTO,
-    IJobSaves
-} from '@/types/backend';
-import axios from 'config/axios-customize';
+} from "@/types/backend";
+import axios from "config/axios-customize";
 
 /**
  * 
 Module Auth
  */
-export const callRegister = (name: string, email: string, password: string, age: number, gender: string, address: string) => {
-    return axios.post<IBackendRes<IUser>>('/api/v1/auth/register', { name, email, password, age, gender, address })
-}
+export const callRegister = (
+    name: string,
+    email: string,
+    password: string,
+    age: number,
+    gender: string,
+    address: string
+) => {
+    return axios.post<IBackendRes<IUser>>("/api/v1/auth/register", {
+        name,
+        email,
+        password,
+        age,
+        gender,
+        address,
+    });
+};
 
 export const callLogin = (username: string, password: string) => {
-    return axios.post<IBackendRes<IAccount>>('/api/v1/auth/login', { username, password })
-}
+    return axios.post<IBackendRes<IAccount>>("/api/v1/auth/login", {
+        username,
+        password,
+    });
+};
 
 export const callFetchAccount = () => {
-    return axios.get<IBackendRes<IGetAccount>>('/api/v1/auth/account')
-}
+    return axios.get<IBackendRes<IGetAccount>>("/api/v1/auth/account");
+};
 
 export const callRefreshToken = () => {
-    return axios.get<IBackendRes<IAccount>>('/api/v1/auth/refresh')
-}
+    return axios.get<IBackendRes<IAccount>>("/api/v1/auth/refresh");
+};
 
 export const callLogout = () => {
-    return axios.post<IBackendRes<string>>('/api/v1/auth/logout')
-}
-
+    return axios.post<IBackendRes<string>>("/api/v1/auth/logout");
+};
 
 /**
  * Upload single file
  */
 export const callUploadSingleFile = (file: any, folderType: string) => {
     const bodyFormData = new FormData();
-    bodyFormData.append('file', file);
-    bodyFormData.append('folder', folderType);
+    bodyFormData.append("file", file);
+    bodyFormData.append("folder", folderType);
 
     return axios<IBackendRes<{ fileName: string }>>({
-        method: 'post',
-        url: '/api/v1/files',
+        method: "post",
+        url: "/api/v1/files",
         data: bodyFormData,
         headers: {
             "Content-Type": "multipart/form-data",
         },
     });
-}
+};
 
 /**
  * Download file
  */
 export const callDownloadFile = (fileName: string, folder: string) => {
     return axios({
-        url: '/api/v1/files',
-        method: 'GET',
+        url: "/api/v1/files",
+        method: "GET",
         params: {
             fileName,
-            folder
+            folder,
         },
-        responseType: 'blob'  // Quan trọng: phải set responseType là blob để nhận file
+        responseType: "blob", // Quan trọng: phải set responseType là blob để nhận file
     });
-}
-
-
-
+};
 
 /**
  * 
 Module Company
  */
-export const callCreateCompany = (name: string, address: string, description: string, logo: string) => {
-    return axios.post<IBackendRes<ICompany>>('/api/v1/companies', { name, address, description, logo })
-}
+export const callCreateCompany = (
+    name: string,
+    address: string,
+    description: string,
+    logo: string
+) => {
+    return axios.post<IBackendRes<ICompany>>("/api/v1/companies", {
+        name,
+        address,
+        description,
+        logo,
+    });
+};
 
-export const callUpdateCompany = (id: string, name: string, address: string, description: string, logo: string) => {
-    return axios.put<IBackendRes<ICompany>>(`/api/v1/companies`, { id, name, address, description, logo })
-}
+export const callUpdateCompany = (
+    id: string,
+    name: string,
+    address: string,
+    description: string,
+    logo: string
+) => {
+    return axios.put<IBackendRes<ICompany>>(`/api/v1/companies`, {
+        id,
+        name,
+        address,
+        description,
+        logo,
+    });
+};
 
 export const callDeleteCompany = (id: string) => {
     return axios.delete<IBackendRes<ICompany>>(`/api/v1/companies/${id}`);
-}
+};
 
 export const callFetchCompany = (query: string) => {
-    return axios.get<IBackendRes<IModelPaginate<ICompany>>>(`/api/v1/companies?${query}`);
-}
+    return axios.get<IBackendRes<IModelPaginate<ICompany>>>(
+        `/api/v1/companies?${query}`
+    );
+};
 
 export const callFetchCompanyById = (id: string) => {
     return axios.get<IBackendRes<ICompany>>(`/api/v1/companies/${id}`);
-}
+};
 export const callCountCompanies = () => {
-    return axios.get<IBackendRes<number>>('/api/v1/companies/count');
-}
+    return axios.get<IBackendRes<number>>("/api/v1/companies/count");
+};
 
 /**
  * 
 Module Skill
  */
 export const callCreateSkill = (name: string) => {
-    return axios.post<IBackendRes<ISkill>>('/api/v1/skills', { name })
-}
+    return axios.post<IBackendRes<ISkill>>("/api/v1/skills", { name });
+};
 
 export const callUpdateSkill = (id: string, name: string) => {
-    return axios.put<IBackendRes<ISkill>>(`/api/v1/skills`, { id, name })
-}
+    return axios.put<IBackendRes<ISkill>>(`/api/v1/skills`, { id, name });
+};
 
 export const callDeleteSkill = (id: string) => {
     return axios.delete<IBackendRes<ISkill>>(`/api/v1/skills/${id}`);
-}
+};
 
 export const callFetchAllSkill = (query: string) => {
-    return axios.get<IBackendRes<IModelPaginate<ISkill>>>(`/api/v1/skills?${query}`);
-}
-
-
+    return axios.get<IBackendRes<IModelPaginate<ISkill>>>(
+        `/api/v1/skills?${query}`
+    );
+};
 
 /**
  * 
 Module User
  */
 export const callCreateUser = (user: IUser) => {
-    return axios.post<IBackendRes<IUser>>('/api/v1/users', { ...user })
-}
+    return axios.post<IBackendRes<IUser>>("/api/v1/users", { ...user });
+};
 
 export const callUpdateUser = (user: IUser) => {
-    return axios.put<IBackendRes<IUser>>(`/api/v1/users/update`, { ...user })
-}
+    return axios.put<IBackendRes<IUser>>(`/api/v1/users/update`, { ...user });
+};
 
 // Thêm API upload ảnh
-export const callUploadProfileImage = (userId: number|string, file: File) => {
+export const callUploadProfileImage = (userId: number | string, file: File) => {
     const formData = new FormData();
-    formData.append('file', file);
-    return axios.put<IBackendRes<IUser>>(`/api/v1/users/${userId}/profile-image`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
+    formData.append("file", file);
+    return axios.put<IBackendRes<IUser>>(
+        `/api/v1/users/${userId}/profile-image`,
+        formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
         }
-    });
-}
+    );
+};
 
 export const callDeleteUser = (id: string) => {
     return axios.delete<IBackendRes<IUser>>(`/api/v1/users/${id}`);
-}
+};
 
 export const callFetchUser = (query: string) => {
-    return axios.get<IBackendRes<IModelPaginate<IUser>>>(`/api/v1/users?${query}`);
-}
+    return axios.get<IBackendRes<IModelPaginate<IUser>>>(
+        `/api/v1/users?${query}`
+    );
+};
 
-export const callChangePassword = (id: string|number, data: { currentPassword: string; newPassword: string }) => {
-    return axios.put<IBackendRes<any>>(`/api/v1/users/${id}/change-password`, data);
-}
+export const callChangePassword = (
+    id: string | number,
+    data: { currentPassword: string; newPassword: string }
+) => {
+    return axios.put<IBackendRes<any>>(
+        `/api/v1/users/${id}/change-password`,
+        data
+    );
+};
 export const callFetchUserById = (id: string | number) => {
     return axios.get<IBackendRes<IUser>>(`/api/v1/users/${id}`);
-}
+};
 export const callFetchPostCountByUserId = (id: string) => {
     return axios.get<IBackendRes<number>>(`/api/v1/users/post_count/${id}`);
 };
 
 export const callCountUsers = () => {
-    return axios.get<IBackendRes<number>>('/api/v1/users/count');
-}
+    return axios.get<IBackendRes<number>>("/api/v1/users/count");
+};
 
 export const callGetCurrentUser = () => {
-    return axios.get<IBackendRes<IUser>>('/api/v1/users/me');
-}
-
+    return axios.get<IBackendRes<IUser>>("/api/v1/users/me");
+};
 
 export const callDeleteProfileImage = (userId: string | number) => {
-    return axios.delete<IBackendRes<IUser>>(`/api/v1/users/${userId}/profile-image`);
-}
+    return axios.delete<IBackendRes<IUser>>(
+        `/api/v1/users/${userId}/profile-image`
+    );
+};
 /**
  * 
 Module Job
  */
 export const callCreateJob = (job: IJob) => {
-    return axios.post<IBackendRes<IJob>>('/api/v1/jobs', { ...job })
-}
+    return axios.post<IBackendRes<IJob>>("/api/v1/jobs", { ...job });
+};
 
 export const callUpdateJob = (job: IJob, id: string) => {
-    return axios.put<IBackendRes<IJob>>(`/api/v1/jobs`, { id, ...job })
-}
+    return axios.put<IBackendRes<IJob>>(`/api/v1/jobs`, { id, ...job });
+};
 
 export const callDeleteJob = (id: string) => {
     return axios.delete<IBackendRes<IJob>>(`/api/v1/jobs/${id}`);
-}
+};
 
 export const callFetchJob = (query: string) => {
-    return axios.get<IBackendRes<IModelPaginate<IJob>>>(`/api/v1/jobs?${query}`);
-}
+    return axios.get<IBackendRes<IModelPaginate<IJob>>>(
+        `/api/v1/jobs?${query}`
+    );
+};
 
 export const callFetchJobById = (id: string) => {
     return axios.get<IBackendRes<IJob>>(`/api/v1/jobs/${id}`);
-}
+};
 
 export const callFetchJobsBySkillId = (skillId: string) => {
-    return axios.get<IBackendRes<IModelPaginate<IJob>>>(`/api/v1/jobs/skills/${skillId}`);
-}
+    return axios.get<IBackendRes<IModelPaginate<IJob>>>(
+        `/api/v1/jobs/skills/${skillId}`
+    );
+};
 
 export const callFetchJobsByLocation = (location: string) => {
-    return axios.get<IBackendRes<IModelPaginate<IJob>>>(`/api/v1/jobs/location/${location}`);
-}
+    return axios.get<IBackendRes<IModelPaginate<IJob>>>(
+        `/api/v1/jobs/location/${location}`
+    );
+};
 
 export const callFetchRandomJobs = () => {
-    return axios.get<IBackendRes<IModelPaginate<IJob>>>('/api/v1/jobs/random');
-}
+    return axios.get<IBackendRes<IModelPaginate<IJob>>>("/api/v1/jobs/random");
+};
 export const callCountJobs = () => {
-    return axios.get<IBackendRes<number>>('/api/v1/jobs/count');
-}
-
-
+    return axios.get<IBackendRes<number>>("/api/v1/jobs/count");
+};
 
 export const callSaveJob = (userId: number, jobId: number) => {
-    return axios.post<IBackendRes<boolean>>('/api/v1/user-saved-jobs', null, {
-        params: { userId, jobId }
+    return axios.post<IBackendRes<boolean>>("/api/v1/user-saved-jobs", null, {
+        params: { userId, jobId },
     });
-}
+};
 
 export const callCheckSavedJob = (userId: number, jobId: number) => {
-    return axios.get<IBackendRes<boolean>>('/api/v1/user-saved-jobs/check', {
-        params: { userId, jobId }
+    return axios.get<IBackendRes<boolean>>("/api/v1/user-saved-jobs/check", {
+        params: { userId, jobId },
     });
-}
+};
 
 export const callToggleSavedJob = (userId: number, jobId: number) => {
-    return axios.put<IBackendRes<boolean>>('/api/v1/user-saved-jobs/toggle', null, {
-        params: { userId, jobId }
-    });
-}
+    return axios.put<IBackendRes<boolean>>(
+        "/api/v1/user-saved-jobs/toggle",
+        null,
+        {
+            params: { userId, jobId },
+        }
+    );
+};
 export const callFetchSavedJobsByUserId = (userId: number | string) => {
-    return axios.get<IBackendRes<IJobSaves[]>>(`/api/v1/user-saved-jobs?userId=${userId}`);
-}
-
+    return axios.get<IBackendRes<IJobSaves[]>>(
+        `/api/v1/user-saved-jobs?userId=${userId}`
+    );
+};
 
 /**
  * Fetch jobs by HR user ID
  */
 export const callFetchJobsByHRUserId = (userId: string) => {
     return axios.get<IBackendRes<IJob[]>>(`/api/v1/jobs/hr/${userId}`);
-}
+};
 
 /**
  * 
 Module Resume
  */
-export const callCreateResume = (url: string, jobId: any, email: string, userId: string | number) => {
-    return axios.post<IBackendRes<IResume>>('/api/v1/resumes', {
-        email, url,
+export const callCreateResume = (
+    url: string,
+    jobId: any,
+    email: string,
+    userId: string | number
+) => {
+    return axios.post<IBackendRes<IResume>>("/api/v1/resumes", {
+        email,
+        url,
         status: "PENDING",
         user: {
-            "id": userId
+            id: userId,
         },
         job: {
-            "id": jobId
-        }
-    })
-}
+            id: jobId,
+        },
+    });
+};
 
 export const callUpdateResumeStatus = (id: any, status: string) => {
-    return axios.put<IBackendRes<IResume>>(`/api/v1/resumes`, { id, status })
-}
+    return axios.put<IBackendRes<IResume>>(`/api/v1/resumes`, { id, status });
+};
 
 export const callDeleteResume = (id: string) => {
     return axios.delete<IBackendRes<IResume>>(`/api/v1/resumes/${id}`);
-}
+};
 
 export const callFetchResume = (query: string) => {
-    return axios.get<IBackendRes<IModelPaginate<IResume>>>(`/api/v1/resumes?${query}`);
-}
+    return axios.get<IBackendRes<IModelPaginate<IResume>>>(
+        `/api/v1/resumes?${query}`
+    );
+};
 
 export const callFetchResumeById = (id: string) => {
     return axios.get<IBackendRes<IResume>>(`/api/v1/resumes/${id}`);
-}
+};
 
 export const callFetchResumeByUser = () => {
-    return axios.post<IBackendRes<IModelPaginate<IResume>>>(`/api/v1/resumes/by-user`);
-}
+    return axios.post<IBackendRes<IModelPaginate<IResume>>>(
+        `/api/v1/resumes/by-user`
+    );
+};
 
 export const callFetchResumesByHRUserId = (userId: string) => {
-    return axios.get<IBackendRes<IModelPaginate<IResume>>>(`/api/v1/resumes/by-hr/${userId}`);
-}
+    return axios.get<IBackendRes<IModelPaginate<IResume>>>(
+        `/api/v1/resumes/by-hr/${userId}`
+    );
+};
 
 export const callCountResumes = () => {
-    return axios.get<IBackendRes<number>>('/api/v1/resumes/count');
-}
+    return axios.get<IBackendRes<number>>("/api/v1/resumes/count");
+};
 export const callFetchResumeDetails = () => {
-    return axios.get<IBackendRes<ResumeDetailDTO[]>>('/api/v1/resumes/details');
-}
-
+    return axios.get<IBackendRes<ResumeDetailDTO[]>>("/api/v1/resumes/details");
+};
 
 /**
  * 
 Module Permission
  */
 export const callCreatePermission = (permission: IPermission) => {
-    return axios.post<IBackendRes<IPermission>>('/api/v1/permissions', { ...permission })
-}
+    return axios.post<IBackendRes<IPermission>>("/api/v1/permissions", {
+        ...permission,
+    });
+};
 
 export const callUpdatePermission = (permission: IPermission, id: string) => {
-    return axios.put<IBackendRes<IPermission>>(`/api/v1/permissions`, { id, ...permission })
-}
+    return axios.put<IBackendRes<IPermission>>(`/api/v1/permissions`, {
+        id,
+        ...permission,
+    });
+};
 
 export const callDeletePermission = (id: string) => {
     return axios.delete<IBackendRes<IPermission>>(`/api/v1/permissions/${id}`);
-}
+};
 
 export const callFetchPermission = (query: string) => {
-    return axios.get<IBackendRes<IModelPaginate<IPermission>>>(`/api/v1/permissions?${query}`);
-}
+    return axios.get<IBackendRes<IModelPaginate<IPermission>>>(
+        `/api/v1/permissions?${query}`
+    );
+};
 
 export const callFetchPermissionById = (id: string) => {
     return axios.get<IBackendRes<IPermission>>(`/api/v1/permissions/${id}`);
-}
+};
 
 /**
  * 
 Module Role
  */
 export const callCreateRole = (role: IRole) => {
-    return axios.post<IBackendRes<IRole>>('/api/v1/roles', { ...role })
-}
+    return axios.post<IBackendRes<IRole>>("/api/v1/roles", { ...role });
+};
 
 export const callUpdateRole = (role: IRole, id: string) => {
-    return axios.put<IBackendRes<IRole>>(`/api/v1/roles`, { id, ...role })
-}
+    return axios.put<IBackendRes<IRole>>(`/api/v1/roles`, { id, ...role });
+};
 
 export const callDeleteRole = (id: string) => {
     return axios.delete<IBackendRes<IRole>>(`/api/v1/roles/${id}`);
-}
+};
 
 export const callFetchRole = (query: string) => {
-    return axios.get<IBackendRes<IModelPaginate<IRole>>>(`/api/v1/roles?${query}`);
-}
+    return axios.get<IBackendRes<IModelPaginate<IRole>>>(
+        `/api/v1/roles?${query}`
+    );
+};
 
 export const callFetchRoleById = (id: string) => {
     return axios.get<IBackendRes<IRole>>(`/api/v1/roles/${id}`);
-}
+};
 
 /**
  * 
 Module Subscribers
  */
 export const callCreateSubscriber = (subs: ISubscribers) => {
-    return axios.post<IBackendRes<ISubscribers>>('/api/v1/subscribers', { ...subs })
-}
+    return axios.post<IBackendRes<ISubscribers>>("/api/v1/subscribers", {
+        ...subs,
+    });
+};
 
 export const callGetSubscriberSkills = () => {
-    return axios.post<IBackendRes<ISubscribers>>('/api/v1/subscribers/skills')
-}
+    return axios.post<IBackendRes<ISubscribers>>("/api/v1/subscribers/skills");
+};
 
 export const callUpdateSubscriber = (subs: ISubscribers) => {
-    return axios.put<IBackendRes<ISubscribers>>(`/api/v1/subscribers`, { ...subs })
-}
+    return axios.put<IBackendRes<ISubscribers>>(`/api/v1/subscribers`, {
+        ...subs,
+    });
+};
 
 export const callDeleteSubscriber = (id: string) => {
     return axios.delete<IBackendRes<ISubscribers>>(`/api/v1/subscribers/${id}`);
-}
+};
 
 export const callFetchSubscriber = (query: string) => {
-    return axios.get<IBackendRes<IModelPaginate<ISubscribers>>>(`/api/v1/subscribers?${query}`);
-}
+    return axios.get<IBackendRes<IModelPaginate<ISubscribers>>>(
+        `/api/v1/subscribers?${query}`
+    );
+};
 
 export const callFetchSubscriberById = (id: string) => {
     return axios.get<IBackendRes<ISubscribers>>(`/api/v1/subscribers/${id}`);
-}
+};
 
 /**
  *
@@ -385,68 +470,69 @@ export const callFetchSubscriberById = (id: string) => {
  */
 export const callCheckEmail = (email: string) => {
     return axios.get<IBackendRes<boolean>>(`/api/v1/email/check`, {
-        params: { email }
+        params: { email },
     });
-}
+};
 
 //  API gửi mã OTP
 export const callSendOTP = (email: string) => {
     return axios.post<IBackendRes<any>>(`/api/v1/email/send-otp`, null, {
-        params: { email }
+        params: { email },
     });
-}
+};
 
 //  API verify mã OTP
 export const callVerifyOTP = (email: string, otpCode: string) => {
     return axios.post<IBackendRes<any>>(`/api/v1/email/verify-otp`, {
         email,
-        otpCode
+        otpCode,
     });
-}
+};
 //  API reset password
 export const callResetPassword = (email: string, newPassword: string) => {
-    return axios.post<IBackendRes<any>>('/api/v1/users/reset-password', {
+    return axios.post<IBackendRes<any>>("/api/v1/users/reset-password", {
         email,
-        newPassword
+        newPassword,
     });
-}
+};
 
 /**
  *
  * Module PostLimit
  * */
 export const callFetchPostLimits = (query?: string) => {
-    const url = query ? `/api/v1/post-limits?${query}` : '/api/v1/post-limits';
+    const url = query ? `/api/v1/post-limits?${query}` : "/api/v1/post-limits";
     return axios.get(url);
 };
 
 export const callCreatePostLimit = (postLimit: IPostLimit) => {
-    return axios.post<IBackendRes<IPostLimit>>('/api/v1/post-limits', postLimit);
-}
-
+    return axios.post<IBackendRes<IPostLimit>>(
+        "/api/v1/post-limits",
+        postLimit
+    );
+};
 
 export const callDeletePostLimit = (id: number) => {
     return axios.delete<IBackendRes<string>>(`/api/v1/post-limits/${id}`);
-}
-
+};
 
 export const callUpdatePostLimit = (id: number, postLimit: IPostLimit) => {
-    return axios.put<IBackendRes<IPostLimit>>(`/api/v1/post-limits/${id}`, postLimit);
-}
-
-
+    return axios.put<IBackendRes<IPostLimit>>(
+        `/api/v1/post-limits/${id}`,
+        postLimit
+    );
+};
 
 /**
  *
  * Module Payment
  * */
 export const callCreatePayment = (data: IPaymentRequest) => {
-    return axios.post('/api/v1/payments/create-url', data);
+    return axios.post("/api/v1/payments/create-url", data);
 };
 
-
 export const callGetPaymentSuccess = () => {
-    return axios.get<IBackendRes<IPaymentData>>('/api/v1/payments/success');
+    return axios.get<IBackendRes<IPaymentData>>("/api/v1/payments/success");
 };
 
 export const callGetAllPayments = (query: string) => {
@@ -454,24 +540,33 @@ export const callGetAllPayments = (query: string) => {
 };
 
 export const callUpdatePaymentStatus = (id: number, status: string) => {
-    return axios.put<IBackendRes<IPaymentData>>(`/api/v1/payments/update/${id}`, { status });
+    return axios.put<IBackendRes<IPaymentData>>(
+        `/api/v1/payments/update/${id}`,
+        { status }
+    );
 };
 export const callGetPaymentPlanSales = (year: number) => {
-    return axios.get<IBackendRes<IPlanSalesResponse>>('/api/v1/payments/plansales', {
-        params: { year }
-    });
+    return axios.get<IBackendRes<IPlanSalesResponse>>(
+        "/api/v1/payments/plansales",
+        {
+            params: { year },
+        }
+    );
 };
 
 export const callGetTotalPricePaymentSuccess = () => {
-    return axios.get<IBackendRes<{ code: string; data: number; message: string }>>('/api/v1/payments/total-price');
-}
+    return axios.get<
+        IBackendRes<{ code: string; data: number; message: string }>
+    >("/api/v1/payments/total-price");
+};
 
-
-``
+``;
 /**
  *
  * Module Subscription
  * */
 export const callFetchSubscriptionStatus = (userId: string) => {
-    return axios.get<IBackendRes<ISubscription>>(`/api/v1/subscriptions/${userId}`);
+    return axios.get<IBackendRes<ISubscription>>(
+        `/api/v1/subscriptions/${userId}`
+    );
 };

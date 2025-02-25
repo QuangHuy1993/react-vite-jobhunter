@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Card, Row, Col, Button, Tag, Modal, message, Breadcrumb } from 'antd';
-import { CrownOutlined, CheckCircleOutlined, HomeOutlined, ArrowLeftOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { callFetchPostLimits, callCreatePayment, callFetchSubscriptionStatus } from '@/config/api';
-import { IPostLimit, IPaymentRequest, ISubscription,ExpirationInfo } from "@/types/backend";
-import styles from '@/styles/client.module.scss';
-import { useLocation } from 'react-router-dom';
+import { callCreatePayment, callFetchPostLimits, callFetchSubscriptionStatus } from '@/config/api';
 import { RootState } from '@/redux/store';
+import styles from '@/styles/donate.module.scss';
+import { ExpirationInfo, IPaymentRequest, IPostLimit, ISubscription } from "@/types/backend";
+import { ArrowLeftOutlined, CheckCircleOutlined, CrownOutlined, HomeOutlined } from '@ant-design/icons';
+import { Breadcrumb, Button, Card, Col, Row, Tag, message } from 'antd';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import VIPPaymentModal from './VIPPaymentModal';
 
-const formatExpirationDate = (timeRemainingInSeconds: string): ExpirationInfo => {
-    const remainingSeconds = parseInt(timeRemainingInSeconds);
+
+const formatExpirationDate = (timeRemainingInSeconds?: string): ExpirationInfo => {
+    const remainingSeconds = timeRemainingInSeconds ? parseInt(timeRemainingInSeconds) : 0;
     const expirationDate = new Date(Date.now() + remainingSeconds * 1000);
 
     // Tính số ngày còn lại
@@ -150,7 +150,7 @@ const DonatePage = () => {
                 <div className={styles.container}>
                     <div className={styles.headerFlex}>
                         <Button
-                            icon={<ArrowLeftOutlined/>}
+                            icon={<ArrowLeftOutlined />}
                             onClick={() => navigate(-1)}
                             className={styles.backButton}
                         >
@@ -161,7 +161,7 @@ const DonatePage = () => {
                                 {
                                     title: (
                                         <Link to="/">
-                                            <HomeOutlined/> Trang chủ
+                                            <HomeOutlined /> Trang chủ
                                         </Link>
                                     ),
                                 },
@@ -177,7 +177,7 @@ const DonatePage = () => {
             <div className={styles.mainContent}>
                 <div className={styles.titleSection}>
                     <h1>
-                        <CrownOutlined className={styles.crownIcon}/>
+                        <CrownOutlined className={styles.crownIcon} />
                         Nâng cấp tài khoản VIP
                     </h1>
                     <p>
@@ -187,13 +187,16 @@ const DonatePage = () => {
 
 
 
-                <Row gutter={[16, 16]} justify="center">
-                    {postLimits.map((plan) => (
+                <Row gutter={[24, 32]} justify="center">
+                    {postLimits.map((plan, index) => (
                         <Col xs={24} sm={12} md={8} key={plan.id}>
                             <Card
-                                className={`${styles.planCard} ${
-                                    plan.planName === 'PREMIUM' ? styles.premiumCard : ''
-                                }`}
+                                className={`${styles.planCard} ${plan.planName === 'PREMIUM' ? styles.premiumCard :
+                                    plan.planName === 'BASIC' ? styles.basicPlan :
+                                        plan.planName === 'DIAMOND' ? styles.diamondPlan :
+                                            plan.planName === 'FREE' ? styles.freePlan : ''
+                                    }`}
+                                style={{ '--delay': index } as React.CSSProperties}
                                 title={
                                     <div className={styles.planTitle}>
                                         <Tag color={planColors[plan.planName] || 'default'}>
@@ -210,10 +213,25 @@ const DonatePage = () => {
                                 </h3>
                                 <div className={styles.features}>
                                     <p>
-                                        <CheckCircleOutlined className={styles.checkIcon}/>
+                                        <CheckCircleOutlined className={styles.checkIcon} />
                                         {plan.maxPostsPerMonth} bài đăng mỗi tháng
                                     </p>
-                                    <p>{plan.description}</p>
+                                    <p>
+                                        <CheckCircleOutlined className={styles.checkIcon} />
+                                        {plan.description}
+                                    </p>
+                                    {plan.planName !== 'FREE' && (
+                                        <p>
+                                            <CheckCircleOutlined className={styles.checkIcon} />
+                                            Hỗ trợ kỹ thuật ưu tiên
+                                        </p>
+                                    )}
+                                    {plan.planName === 'PREMIUM' && (
+                                        <p>
+                                            <CheckCircleOutlined className={styles.checkIcon} />
+                                            Tin tuyển dụng được đề xuất ưu tiên
+                                        </p>
+                                    )}
                                 </div>
                                 <Button
                                     type="default"
@@ -234,23 +252,33 @@ const DonatePage = () => {
                     ))}
                 </Row>
 
-                {/* Thêm phần hiển thị thông tin subscription */}
+                {/* Hiển thị thông tin gói đăng ký hiện tại */}
                 {subscription && subscription.status === 'ACTIVE' && (
                     <div className={styles.subscriptionInfo}>
-                        <div className={styles.title}>Gói đăng ký hiện tại</div>
+                        <div className={styles.title}>
+                            <CrownOutlined style={{ marginRight: '8px' }} />
+                            Gói đăng ký hiện tại
+                        </div>
                         <div className={styles.expiryDate}>
-                            <span className={styles.expiryDate}>{subscription.planName}</span>
+                            <span className={styles.planName}>{subscription.planName}</span>
                             {(() => {
                                 const { formattedDate, daysRemaining } = formatExpirationDate(subscription.timeRemainingInSeconds.toString());
                                 return (
                                     <>
-                        <span className={styles.expireDate}>
-                            Ngày hết hạn: {formattedDate}
-                        </span>
                                         <span className={styles.expireDate}>
-                                            Thời gian còn lại: {daysRemaining} ngày
+                                            <strong>Ngày hết hạn:</strong> {formattedDate}
+                                        </span>
+                                        <span className={styles.expireDate}>
+                                            <strong>Thời gian còn lại:</strong> {daysRemaining} ngày
                                         </span>
 
+                                        {daysRemaining < 7 && (
+                                            <div className={styles.expirationWarning}>
+                                                <span className={styles.warningText}>
+                                                    Gói của bạn sắp hết hạn. Hãy gia hạn để tiếp tục sử dụng dịch vụ
+                                                </span>
+                                            </div>
+                                        )}
                                     </>
                                 );
                             })()}

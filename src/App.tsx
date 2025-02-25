@@ -15,6 +15,7 @@ import LoginPage from 'pages/auth/login';
 import RegisterPage from 'pages/auth/register';
 import HomePage from 'pages/home';
 import DonatePage from "pages/home/donate";
+import EmployerPage from 'pages/home/employer';
 import { useEffect, useRef, useState } from 'react';
 import {
   createBrowserRouter,
@@ -26,8 +27,11 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from 'styles/app.module.scss';
 import ViewUpsertJob from './components/admin/job/upsert.job';
+import ManageAccount from './components/client/modal/manage.account';
+import EmailSubscription from './components/client/profile/EmailSubscription';
 import MyJobs from './components/client/profile/MyJob';
 import ProfileAccount from './components/client/profile/ProfileAccount';
+import Settings from './components/client/profile/Settings';
 import LayoutApp from './components/share/layout.app';
 import CompanyPage from './pages/admin/company';
 import DashboardPage from './pages/admin/dashboard';
@@ -41,9 +45,6 @@ import ClientCompanyDetailPage from './pages/company/detail';
 import ClientJobPage from './pages/job';
 import ClientJobDetailPage from './pages/job/detail';
 import { fetchAccount } from './redux/slice/accountSlide';
-import ManageAccount from './components/client/modal/manage.account';
-import EmailSubscription from './components/client/profile/EmailSubscription';
-import Settings from './components/client/profile/Settings';
 const LayoutClient = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
@@ -89,6 +90,10 @@ export default function App() {
 
   const router = createBrowserRouter([
     {
+      path: "/employer",
+      element: <EmployerPage />
+    },
+    {
       path: "/profile/settings",
       element: <Settings />
     },
@@ -98,7 +103,7 @@ export default function App() {
     },
     {
       path: "/manage-account",
-      element: <ManageAccount open={true} onClose={() => {}} />
+      element: <ManageAccount open={true} onClose={() => { }} />
     },
     {
       path: "/profile",

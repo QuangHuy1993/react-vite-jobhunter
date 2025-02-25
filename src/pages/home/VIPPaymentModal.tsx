@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Modal, Select, Divider } from 'antd';
+import styles from '@/styles/donate.module.scss';
 import { IPostLimit } from '@/types/backend';
-import styles from '@/styles/client.module.scss';
-import { motion, AnimatePresence } from 'framer-motion';
 import { CrownOutlined } from '@ant-design/icons';
+import { Divider, Modal, Select } from 'antd';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useState } from 'react';
 
 interface VIPPaymentModalProps {
     isVisible: boolean;
@@ -64,8 +64,8 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
     return (
         <Modal
             title={
-                <div style={{ 
-                    color: '#991B1B', 
+                <div style={{
+                    color: '#991B1B',
                     fontSize: '20px',
                     display: 'flex',
                     alignItems: 'center',
@@ -82,8 +82,8 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
             cancelText="Hủy"
             width={500}
             className={styles.vipModal}
-            okButtonProps={{ 
-                style: { 
+            okButtonProps={{
+                style: {
                     backgroundColor: '#991B1B',
                     borderColor: '#991B1B'
                 }
@@ -99,7 +99,7 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
                         transition={{ duration: 0.2 }}
                     >
                         <div className={styles.planInfo}>
-                            <motion.h3 
+                            <motion.h3
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.1 }}
@@ -131,7 +131,7 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
                             />
                         </div>
 
-                        <motion.div 
+                        <motion.div
                             className={styles.priceBreakdown}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -166,7 +166,7 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
 
                             <Divider style={{ margin: '12px 0' }} />
 
-                            <motion.div 
+                            <motion.div
                                 className={styles.totalPrice}
                                 initial={{ scale: 0.95 }}
                                 animate={{ scale: 1 }}

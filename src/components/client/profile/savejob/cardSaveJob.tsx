@@ -70,12 +70,7 @@ const CardSaveJob: React.FC = () => {
             cancelButtonText: 'Hủy',
             confirmButtonText: 'Đồng ý',
             background: '#f8f9fa',
-            backdrop: `
-            rgba(0,0,0,0.4)
-            url("../../../assets/nyan-cat.gif")
-            left top
-            no-repeat
-    `,
+            backdrop: `rgba(0,0,0,0.4) url("../../../assets/nyan-cat.gif") left top no-repeat`,
             showClass: {
                 popup: 'animate__animated animate__fadeInDown'
             },
@@ -127,6 +122,9 @@ const CardSaveJob: React.FC = () => {
                             pauseOnHover: true,
                             draggable: true,
                             progress: undefined,
+                            onClose: () => {
+                                window.location.reload();
+                            }
                         }
                     );
                 } else {
@@ -178,8 +176,10 @@ const CardSaveJob: React.FC = () => {
                 try {
                     const response = await callFetchSavedJobsByUserId(user.id);
                     if (response.data) {
-                        setSavedJobs(response.data);
-                        setTotalPages(Math.ceil(response.data.length / itemsPerPage));
+
+                        const activeJobs = response.data.filter(job => job.status === "true");
+                        setSavedJobs(activeJobs);
+                        setTotalPages(Math.ceil(activeJobs.length / itemsPerPage));
                     }
                 } catch (error) {
                     console.error("Lỗi khi lấy danh sách công việc đã lưu:", error);
@@ -188,7 +188,7 @@ const CardSaveJob: React.FC = () => {
         };
 
         fetchSavedJobs();
-    }, [user]);
+    }, [user, itemsPerPage]);
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
