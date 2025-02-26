@@ -1,0 +1,161 @@
+.container {
+    padding: 20px;
+
+    h1 {
+        font-size: 24px;
+        color: #1f2937;
+        margin-bottom: 24px;
+    }
+}
+
+.emailForm {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.selectContainer {
+    margin-bottom: 24px;
+
+    label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: #4b5563;
+    }
+}
+
+.select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+
+    &:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+}
+
+.editorContainer {
+    margin-bottom: 24px;
+
+    label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: #4b5563;
+    }
+}
+
+.toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    button {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 6px;
+        background-color: #f3f4f6;
+        color: #4b5563;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: #e5e7eb;
+            transform: translateY(-1px);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+}
+
+.editor {
+    width: 100%;
+    min-height: 200px;
+    padding: 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    transition: all 0.3s ease;
+
+    &:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+}
+
+.preview {
+    margin-bottom: 24px;
+    padding: 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: #f9fafb;
+
+    h3 {
+        font-size: 16px;
+        color: #4b5563;
+        margin-bottom: 12px;
+    }
+}
+
+.previewContent {
+    p {
+        margin-bottom: 8px;
+        line-height: 1.5;
+        color: #1f2937;
+    }
+}
+
+.sendButton {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #2563eb;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: #1d4ed8;
+        transform: translateY(-1px);
+    }
+
+    &:disabled {
+        background-color: #9ca3af;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    &:active:not(:disabled) {
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.emailForm {
+    animation: fadeIn 0.3s ease;
+}

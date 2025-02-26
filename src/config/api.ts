@@ -2,6 +2,7 @@ import {
     IAccount,
     IBackendRes,
     ICompany,
+    IContactRequest,
     IGetAccount,
     IJob,
     IJobSaves,
@@ -572,5 +573,34 @@ export const callGetTotalPricePaymentSuccess = () => {
 export const callFetchSubscriptionStatus = (userId: string) => {
     return axios.get<IBackendRes<ISubscription>>(
         `/api/v1/subscriptions/${userId}`
+    );
+};
+
+/**
+ * Module ContactRequest
+ */
+export const callFetchAllContactRequests = () => {
+    return axios.get<IBackendRes<IContactRequest[]>>(
+        "/api/v1/contact-requests"
+    );
+};
+
+export const callFetchContactRequestById = (id: number) => {
+    return axios.get<IBackendRes<IContactRequest>>(
+        `/api/v1/contact-requests/${id}`
+    );
+};
+
+export const callUpdateContactRequestStatus = (id: number, status: string) => {
+    return axios.put<IBackendRes<IContactRequest>>(
+        `/api/v1/contact-requests/${id}/status`,
+        { status }
+    );
+};
+
+export const callSendConfirmationEmail = (id: number, content: string) => {
+    return axios.post<IBackendRes<boolean>>(
+        `/api/v1/contact-requests/${id}/send-email`,
+        { content }
     );
 };

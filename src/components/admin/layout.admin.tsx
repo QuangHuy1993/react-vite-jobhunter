@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import LoadingSpinner from '@/components/share/LoadingSpinner';
+import { ALL_PERMISSIONS } from '@/config/permissions';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setLogoutAction } from '@/redux/slice/accountSlide';
+import styles from '@/styles/admin.module.scss';
 import {
-    AppstoreOutlined,
-    ExceptionOutlined,
+    AliwangwangOutlined,
     ApiOutlined,
-    UserOutlined,
+    AppstoreOutlined,
     BankOutlined,
+    BugOutlined,
+    ContactsOutlined,
+    ExceptionOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
-    AliwangwangOutlined,
-    BugOutlined,
     ScheduleOutlined,
+    UserOutlined
 } from '@ant-design/icons';
-import { Layout, Menu, Dropdown, Space, message, Avatar, Button } from 'antd';
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
-import { callLogout } from 'config/api';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { isMobile } from 'react-device-detect';
-import type { MenuProps } from 'antd';
-import { setLogoutAction } from '@/redux/slice/accountSlide';
-import { ALL_PERMISSIONS } from '@/config/permissions';
 import { TableChartOutlined } from "@mui/icons-material";
-import styles from '@/styles/admin.module.scss';
+import type { MenuProps } from 'antd';
+import { Avatar, Button, Dropdown, Layout, Menu, Space, message } from 'antd';
+import { callLogout } from 'config/api';
 import { motion } from 'framer-motion';
-import LoadingSpinner from '@/components/share/LoadingSpinner';
+import { useEffect, useState } from 'react';
+import { isMobile } from 'react-device-detect';
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const { Content, Sider } = Layout;
 
@@ -87,6 +87,13 @@ const LayoutAdmin = () => {
                 && item.method === ALL_PERMISSIONS.PAYMENTS.GET_PAGINATE.method
             )
 
+            const viewContactRequets = permissions?.find(item =>
+                item.apiPath === ALL_PERMISSIONS.CONTACT_REQUESTS.GET_PAGINATE.apiPath
+                && item.method === ALL_PERMISSIONS.CONTACT_REQUESTS.GET_PAGINATE.method
+            )
+
+
+
             const full = [
                 {
                     label: <Link to='/admin'>Dashboard</Link>,
@@ -103,6 +110,11 @@ const LayoutAdmin = () => {
                     label: <Link to='/admin/user'>Người dùng</Link>,
                     key: '/admin/user',
                     icon: <UserOutlined />
+                }] : []),
+                ...(viewContactRequets || ACL_ENABLE === 'false' ? [{
+                    label: <Link to='/admin/contact-request'>Liên hệ tuyển dụng</Link>,
+                    key: '/admin/contact-request',
+                    icon: <ContactsOutlined />
                 }] : []),
                 ...(viewPostLimit || ACL_ENABLE === 'false' ? [{
                     label: <Link to='/admin/post-limit'>Giới hạn bài đăng</Link>,
@@ -223,7 +235,7 @@ const LayoutAdmin = () => {
 
                 <Layout>
                     {!isMobile && (
-                        <motion.div 
+                        <motion.div
                             className={styles['admin-header']}
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}

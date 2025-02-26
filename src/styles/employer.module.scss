@@ -78,6 +78,21 @@ $container-padding: 15px;
             color: #f5222d;
         }
     }
+    .loginButton {
+        font-size: 18px;
+        font-weight: 600;
+        padding: 8px 20px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+        transition: all 0.3s ease;
+
+        &:hover {
+            color: #f5222d !important;
+            border-color: #f5222d;
+            background: rgba(245, 34, 45, 0.05);
+            transform: translateY(-2px);
+        }
+    }
 }
 
 .langSelector {

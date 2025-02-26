@@ -35,6 +35,8 @@ import Settings from './components/client/profile/Settings';
 import LayoutApp from './components/share/layout.app';
 import { LanguageProvider } from './contexts/language-context';
 import CompanyPage from './pages/admin/company';
+import ContactRequestPage from './pages/admin/contact-request/contact-request';
+import SendEmailPage from './pages/admin/contact-request/send-email-confirm-contact';
 import DashboardPage from './pages/admin/dashboard';
 import JobTabs from './pages/admin/job/job.tabs';
 import PermissionPage from './pages/admin/permission';
@@ -168,6 +170,19 @@ export default function App() {
             <ProtectedRoute>
               <UserPage />
             </ProtectedRoute>
+        },
+        {
+          path: "contact-request",
+          children: [
+            {
+              index: true,
+              element: <ProtectedRoute><ContactRequestPage /></ProtectedRoute>
+            },
+            {
+              path: "send-email-confirm-contact", element:
+                <ProtectedRoute><SendEmailPage /></ProtectedRoute>
+            }
+          ]
         },
         {
           path: "/admin/post-limit",

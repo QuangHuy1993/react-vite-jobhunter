@@ -1,22 +1,23 @@
 import Footer from '@/components/client/footer.client';
-import { callFetchCompany, callSubmitContactForm } from '@/config/api';
+import { callFetchCompany, callLogout, callSubmitContactForm } from '@/config/api';
 import { useLanguage } from '@/contexts/language-context';
+import { setLogoutAction } from '@/redux/slice/accountSlide';
 import { RootState } from '@/redux/store';
 import styles from '@/styles/employer.module.scss';
 import { ICompany } from '@/types/backend';
 import { Button, Col, Row, Tooltip, Typography } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 const { Title, Paragraph } = Typography;
-
 /**
  * Trang dành cho nhà tuyển dụng
  * Hiển thị thông tin và quy trình đăng ký trở thành nhà tuyển dụng
  */
 const EmployerPage: React.FC = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.account.user);
     const servicesRef = useRef<HTMLDivElement>(null);
     const brandingRef = useRef<HTMLDivElement>(null);
@@ -62,6 +63,55 @@ const EmployerPage: React.FC = () => {
         website: '',
         termsAgreed: false
     });
+
+    const handleLoginClick = async () => {
+        if (user && user.id) {
+            // Người dùng đã đăng nhập, cần đăng xuất trước
+            try {
+                // Hiển thị toast thông báo đang xử lý
+                const toastId = toast.loading('Đang xử lý yêu cầu...', {
+                    autoClose: false,
+                    closeOnClick: false,
+                    draggable: false,
+                    closeButton: false
+                });
+
+                const res = await callLogout();
+
+                if (res && +res.statusCode === 200) {
+                    // Cập nhật toast thành công
+                    toast.update(toastId, {
+                        render: 'Đã đăng xuất thành công, chuyển hướng đến trang đăng nhập',
+                        type: 'success',
+                        isLoading: false,
+                        autoClose: 1500,
+                        closeButton: true
+                    });
+
+                    // Đặt timeout ngắn để hiển thị thông báo trước khi chuyển hướng
+                    setTimeout(() => {
+                        dispatch(setLogoutAction({}));
+                        navigate('/login');
+                    }, 1000);
+                } else {
+                    // Xử lý lỗi
+                    toast.update(toastId, {
+                        render: 'Có lỗi xảy ra khi đăng xuất, vui lòng thử lại',
+                        type: 'error',
+                        isLoading: false,
+                        autoClose: 3000,
+                        closeButton: true
+                    });
+                }
+            } catch (error) {
+                console.error('Lỗi khi đăng xuất:', error);
+                toast.error('Có lỗi xảy ra khi đăng xuất, vui lòng thử lại');
+            }
+        } else {
+            // Người dùng chưa đăng nhập, chuyển hướng trực tiếp đến trang đăng nhập
+            navigate('/login');
+        }
+    };
 
     //function để xử lý thay đổi input
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -266,7 +316,7 @@ const EmployerPage: React.FC = () => {
                     <span>{t('employerPage')}</span>
                 </div>
                 <div className={styles.auth}>
-                    <Button type="link" onClick={() => navigate('/login')}>{t('login')}</Button>
+                    <Button type="link" onClick={handleLoginClick} className={styles.loginButton}>{t('login')}</Button>
                     <div className={styles.langSelector}>
                         <button
                             className={currentLang === 'EN' ? styles.activeLang : ''}
@@ -336,7 +386,10 @@ const EmployerPage: React.FC = () => {
                                 </Button>
                                 <div className={styles.loginPrompt}>
                                     <span>{t('haveAccount')} </span>
-                                    <a href="/login">{t('login')}</a>
+                                    <a href="#" onClick={(e) => {
+                                        e.preventDefault();
+                                        handleLoginClick();
+                                    }}>{t('login')}</a>
                                 </div>
                             </div>
                         </Col>
@@ -662,7 +715,10 @@ const EmployerPage: React.FC = () => {
                                 <div className={styles.formActions}>
                                     <div className={styles.loginPrompt}>
                                         <span>{t('haveCustomerAccount')} </span>
-                                        <a href="/login" className={styles.loginLink}>{t('login')}</a>
+                                        <a href="#" onClick={(e) => {
+                                            e.preventDefault();
+                                            handleLoginClick();
+                                        }} className={styles.loginLink}>{t('login')}</a>
                                     </div>
                                     <Tooltip
                                         title={!isFormValid() ? t('tooltipMessage') : ''}

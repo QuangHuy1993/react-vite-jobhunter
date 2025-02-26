@@ -5,14 +5,43 @@ export interface IBackendRes<T> {
     data?: T;
 }
 
+export interface IContactRequest {
+    id?: number;
+    fullName: string;
+    position: string;
+    email: string;
+    phone: string;
+    companyName: string;
+    companyLocation: string;
+    website: string;
+    status: string;
+    userId: number;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
 export interface IModelPaginate<T> {
     meta: {
         page: number;
         pageSize: number;
         pages: number;
         total: number;
-    },
-    result: T[]
+    };
+    result: T[];
+}
+
+export interface IContactRequest {
+    id?: number;
+    fullName: string;
+    position: string;
+    email: string;
+    phone: string;
+    companyName: string;
+    companyLocation: string;
+    website: string;
+    status: string;
+    userId: number;
+    createdAt: string;
 }
 
 export interface IAccount {
@@ -30,12 +59,12 @@ export interface IAccount {
                 apiPath: string;
                 method: string;
                 module: string;
-            }[]
-        }
-    }
+            }[];
+        };
+    };
 }
 
-export interface IGetAccount extends Omit<IAccount, "access_token"> { }
+export interface IGetAccount extends Omit<IAccount, "access_token"> {}
 
 export interface ICompany {
     id?: string;
@@ -60,8 +89,6 @@ export interface ISkill {
     updatedAt?: string;
 }
 
-
-
 export interface IUser {
     id?: string;
     name: string;
@@ -77,13 +104,13 @@ export interface IUser {
     role?: {
         id: string;
         name: string;
-    }
+    };
 
     company?: {
         id: string;
         name: string;
         logo: string;
-    }
+    };
     createdBy?: string;
     isDeleted?: boolean;
     deletedAt?: boolean | null;
@@ -99,7 +126,7 @@ export interface IJob {
         id: string;
         name: string;
         logo?: string;
-    }
+    };
     location: string;
     salary: number;
     quantity: number;
@@ -136,7 +163,6 @@ export interface IJobSaves {
         name: string;
     }[];
     status: string;
-    
 }
 export interface IResume {
     id?: string;
@@ -144,20 +170,24 @@ export interface IResume {
     userId: string;
     url: string;
     status: string;
-    companyId: string | {
-        id: string;
-        name: string;
-        logo: string;
-    };
-    jobId: string | {
-        id: string;
-        name: string;
-    };
+    companyId:
+        | string
+        | {
+              id: string;
+              name: string;
+              logo: string;
+          };
+    jobId:
+        | string
+        | {
+              id: string;
+              name: string;
+          };
     history?: {
         status: string;
         updatedAt: Date;
-        updatedBy: { id: string; email: string }
-    }[]
+        updatedBy: { id: string; email: string };
+    }[];
     createdBy?: string;
     isDeleted?: boolean;
     deletedAt?: boolean | null;
@@ -191,7 +221,6 @@ export interface IPermission {
     deletedAt?: boolean | null;
     createdAt?: string;
     updatedAt?: string;
-
 }
 
 export interface IRole {
@@ -230,7 +259,7 @@ export interface IPostLimit {
     updatedAt: string | null;
 }
 
-export interface IPaymentRequest  {
+export interface IPaymentRequest {
     planId: number;
     amount: number;
     orderInfo: string;
@@ -274,7 +303,7 @@ export interface IPlanSalesResponse {
 export interface ISubscription {
     postLimitID: number;
     planName: string;
-    status: string;  // 'ACTIVE' | 'INACTIVE'
+    status: string; // 'ACTIVE' | 'INACTIVE'
     timeRemainingInSeconds: number;
 }
 
