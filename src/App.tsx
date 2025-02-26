@@ -33,6 +33,7 @@ import MyJobs from './components/client/profile/MyJob';
 import ProfileAccount from './components/client/profile/ProfileAccount';
 import Settings from './components/client/profile/Settings';
 import LayoutApp from './components/share/layout.app';
+import { LanguageProvider } from './contexts/language-context';
 import CompanyPage from './pages/admin/company';
 import DashboardPage from './pages/admin/dashboard';
 import JobTabs from './pages/admin/job/job.tabs';
@@ -242,8 +243,11 @@ export default function App() {
 
   return (
     <>
-      <RouterProvider router={router} />
-      <ToastContainer />
+      <LanguageProvider>
+        <RouterProvider router={router} />
+        <ToastContainer />
+      </LanguageProvider>
+
     </>
   )
 }

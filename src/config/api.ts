@@ -496,6 +496,10 @@ export const callResetPassword = (email: string, newPassword: string) => {
     });
 };
 
+export const callSubmitContactForm = (formData: any) => {
+    return axios.post<IBackendRes<any>>("/api/v1/email/contact", formData);
+};
+
 /**
  *
  * Module PostLimit

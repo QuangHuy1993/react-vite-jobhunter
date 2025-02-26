@@ -259,10 +259,31 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
                                     </ConfigProvider>
                                     <div className={styles['extra']}>
                                         {isAuthenticated === false ? (
-                                            <Link to={'/login'}>Đăng Nhập</Link>
+                                            <div style={{ display: "flex", alignItems: "center" }}>
+                                                <Link
+                                                    to="employer"
+                                                    style={{
+                                                        fontWeight: 'bold',
+                                                        color: '#fff',
+                                                        marginRight: '15px',
+                                                        fontSize: '16px'
+                                                    }}
+                                                >
+                                                    Nhà tuyển dụng
+                                                </Link>
+                                                <Link
+                                                    to={'/login'}
+                                                    style={{
+                                                        color: '#fff',
+                                                        fontSize: '16px'
+                                                    }}
+                                                >
+                                                    Đăng Nhập
+                                                </Link>
+                                            </div>
                                         ) : (
                                             <Space size="large">
-                                                {/* Hiển thị "Nhà tuyển dụng" cho mọi người NGOẠI TRỪ người dùng có role là HR */}
+                                                {/* Hiển thị "Nhà tuyển dụng" cho người đăng nhập NGOẠI TRỪ người dùng có role là HR */}
                                                 {user?.role?.name !== 'HR' && (
                                                     <Link
                                                         to="employer"
