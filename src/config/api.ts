@@ -1,9 +1,11 @@
 import {
     IAccount,
     IBackendRes,
+    ICheckEmailResult,
     ICompany,
     IContactRequest,
     IGetAccount,
+    IHrStatus,
     IJob,
     IJobSaves,
     IModelPaginate,
@@ -180,7 +182,11 @@ export const callCreateUser = (user: IUser) => {
 export const callUpdateUser = (user: IUser) => {
     return axios.put<IBackendRes<IUser>>(`/api/v1/users/update`, { ...user });
 };
-
+export const callAssignRoleToUser = (userId: string, roleId: string) => {
+    return axios.put<IBackendRes<{ message: string }>>(
+        `/api/v1/users/${userId}/assign-role/${roleId}`
+    );
+};
 // Thêm API upload ảnh
 export const callUploadProfileImage = (userId: number | string, file: File) => {
     const formData = new FormData();
@@ -234,6 +240,22 @@ export const callDeleteProfileImage = (userId: string | number) => {
     return axios.delete<IBackendRes<IUser>>(
         `/api/v1/users/${userId}/profile-image`
     );
+};
+
+//check HR
+export const callCheckHrStatus = () => {
+    return axios.get<IBackendRes<IHrStatus>>("/api/v1/users/me/hr-status");
+};
+
+// active HR
+export const callActivateHrAccount = (email: string, otpCode: string) => {
+    return axios.post<
+        IBackendRes<{
+            message: string;
+            email: string;
+            isHrActivated: boolean;
+        }>
+    >("/api/v1/email/verify-otp-activate-hr", { email, otpCode });
 };
 /**
  * 
@@ -602,5 +624,32 @@ export const callSendConfirmationEmail = (id: number, content: string) => {
     return axios.post<IBackendRes<boolean>>(
         `/api/v1/contact-requests/${id}/send-email`,
         { content }
+    );
+};
+
+export const callFetchApprovedContactRequests = () => {
+    return axios.get<IBackendRes<IContactRequest[]>>(
+        "/api/v1/contact-requests/approved"
+    );
+};
+export const callCheckContactRequestEmail = (email: string) => {
+    return axios.get<IBackendRes<ICheckEmailResult>>(
+        `/api/v1/contact-requests/check-email`,
+        {
+            params: { email },
+        }
+    );
+};
+
+export const callSendRecruiterActivationEmail = (data: {
+    email: string;
+    name?: string;
+    companyName?: string;
+    password?: string;
+    contactRequestId?: number;
+}) => {
+    return axios.post<IBackendRes<{ message: string }>>(
+        `/api/v1/email/recruiter-activation`,
+        data
     );
 };

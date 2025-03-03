@@ -41,6 +41,8 @@ export interface IContactRequest {
     website: string;
     status: string;
     userId: number;
+    isEmailSent: boolean;
+    emailSentAt: string;
     createdAt: string;
 }
 
@@ -62,6 +64,12 @@ export interface IAccount {
             }[];
         };
     };
+}
+
+export interface IHrStatus {
+    isHrRole: boolean;
+    isHrActivated?: boolean;
+    message: string;
 }
 
 export interface IGetAccount extends Omit<IAccount, "access_token"> {}
@@ -88,7 +96,12 @@ export interface ISkill {
     createdAt?: string;
     updatedAt?: string;
 }
-
+// Thêm interface cho kết quả kiểm tra email
+export interface ICheckEmailResult {
+    message: string;
+    exists: boolean;
+    userData?: IUser;
+}
 export interface IUser {
     id?: string;
     name: string;

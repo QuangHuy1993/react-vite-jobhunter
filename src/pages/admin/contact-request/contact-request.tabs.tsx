@@ -3,33 +3,38 @@ import ContactRequestPage from './contact-request';
 import SendEmailPage from './send-email-confirm-contact';
 import Access from '@/components/share/access';
 import { ALL_PERMISSIONS } from '@/config/permissions';
-import styles from './contact-request.module.scss';
+import styles from './contact-request.tabs.module.scss';
 
 const ContactRequestTabs = () => {
     const [activeTab, setActiveTab] = useState('1');
 
-    const handleTabChange = (tabKey: string) => {
-        setActiveTab(tabKey);
-    };
+    const tabs = [
+        {
+            key: '1',
+            label: 'Quản lý Contact Request',
+            icon: '📋'
+        },
+        {
+            key: '2',
+            label: 'Gửi Email Xác Nhận',
+            icon: '✉️'
+        }
+    ];
 
     return (
         <div className={styles.tabsContainer}>
             <Access permission={ALL_PERMISSIONS.JOBS.GET_PAGINATE}>
                 <div className={styles.tabHeaders}>
-                    <button 
-                        className={`${styles.tabButton} ${activeTab === '1' ? styles.active : ''}`}
-                        onClick={() => handleTabChange('1')}
-                    >
-                        Quản lý Contact Request
-                        <div className={styles.activeIndicator}></div>
-                    </button>
-                    <button 
-                        className={`${styles.tabButton} ${activeTab === '2' ? styles.active : ''}`}
-                        onClick={() => handleTabChange('2')}
-                    >
-                        Send Email
-                        <div className={styles.activeIndicator}></div>
-                    </button>
+                    {tabs.map(tab => (
+                        <button 
+                            key={tab.key}
+                            className={`${styles.tabButton} ${activeTab === tab.key ? styles.active : ''}`}
+                            onClick={() => setActiveTab(tab.key)}
+                        >
+                            <span style={{ marginRight: '8px' }}>{tab.icon}</span>
+                            {tab.label}
+                        </button>
+                    ))}
                 </div>
                 <div className={styles.tabContent}>
                     {activeTab === '1' ? <ContactRequestPage /> : <SendEmailPage />}
@@ -37,6 +42,6 @@ const ContactRequestTabs = () => {
             </Access>
         </div>
     );
-}
+};
 
 export default ContactRequestTabs;

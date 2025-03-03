@@ -1,10 +1,11 @@
+import { callAssignRoleToUser, callCreateUser, callFetchCompany, callFetchRole, callUpdateUser } from "@/config/api";
+import { IUser } from "@/types/backend";
 import { ModalForm, ProForm, ProFormDigit, ProFormSelect, ProFormText } from "@ant-design/pro-components";
 import { Col, Form, Row, message, notification } from "antd";
+import { useEffect, useState } from "react";
 import { isMobile } from 'react-device-detect';
-import { useState, useEffect } from "react";
-import { callCreateUser, callFetchCompany, callFetchRole, callUpdateUser } from "@/config/api";
-import { IUser } from "@/types/backend";
 import { DebounceSelect } from "./debouce.select";
+
 
 interface IProps {
     openModal: boolean;
@@ -56,6 +57,7 @@ const ModalUser = (props: IProps) => {
 
     const submitUser = async (valuesForm: any) => {
         const { name, email, password, address, age, gender, role, company } = valuesForm;
+
         if (dataInit?.id) {
             //update
             const user = {
@@ -66,16 +68,33 @@ const ModalUser = (props: IProps) => {
                 age,
                 gender,
                 address,
+                phoneNumber: "",
+                urlAvatar: "",
+                urlProfile: "",
                 role: { id: role.value, name: "" },
                 company: {
                     id: company.value,
-                    name: company.label
+                    name: company.label,
+                    logo: company.logo
                 }
             }
 
             const res = await callUpdateUser(user);
             if (res.data) {
-                message.success("Cập nhật user thành công");
+                // Kiểm tra nếu role là HR, gọi API assignRole để đánh dấu isHrActivated = false
+                if (role.label === "HR" && dataInit.id && role.value) {
+                    const assignRes = await callAssignRoleToUser(dataInit.id.toString(), role.value.toString());
+                    if (assignRes.statusCode === 200) {
+                        message.success("Cập nhật user và gán quyền HR thành công (Tài khoản HR chưa được kích hoạt)");
+                    } else {
+                        notification.warning({
+                            message: 'Cập nhật user thành công nhưng gán quyền HR thất bại',
+                            description: assignRes.message
+                        });
+                    }
+                } else {
+                    message.success("Cập nhật user thành công");
+                }
                 handleReset();
                 reloadTable();
             } else {
@@ -93,15 +112,34 @@ const ModalUser = (props: IProps) => {
                 age,
                 gender,
                 address,
+                phoneNumber: "",
+                urlAvatar: "",
+                urlProfile: "",
                 role: { id: role.value, name: "" },
                 company: {
                     id: company.value,
-                    name: company.label
+                    name: company.label,
+                    logo: company.logo
                 }
+
             }
+
             const res = await callCreateUser(user);
-            if (res.data) {
-                message.success("Thêm mới user thành công");
+            if (res.data && res.data.id) {  // Kiểm tra res.data và res.data.id có tồn tại
+                // Kiểm tra nếu role là HR và có role.value, gọi API assignRole
+                if (role.label === "HR" && role.value) {
+                    const assignRes = await callAssignRoleToUser(res.data.id.toString(), role.value.toString());
+                    if (assignRes.statusCode === 200) {
+                        message.success("Thêm mới user và gán quyền HR thành công (Tài khoản HR chưa được kích hoạt)");
+                    } else {
+                        notification.warning({
+                            message: 'Thêm mới user thành công nhưng gán quyền HR thất bại',
+                            description: assignRes.message
+                        });
+                    }
+                } else {
+                    message.success("Thêm mới user thành công");
+                }
                 handleReset();
                 reloadTable();
             } else {

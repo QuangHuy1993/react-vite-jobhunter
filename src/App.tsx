@@ -48,6 +48,7 @@ import ClientCompanyDetailPage from './pages/company/detail';
 import ClientJobPage from './pages/job';
 import ClientJobDetailPage from './pages/job/detail';
 import { fetchAccount } from './redux/slice/accountSlide';
+import ContactRequestIndex from './pages/admin/contact-request';
 const LayoutClient = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
@@ -173,16 +174,7 @@ export default function App() {
         },
         {
           path: "contact-request",
-          children: [
-            {
-              index: true,
-              element: <ProtectedRoute><ContactRequestPage /></ProtectedRoute>
-            },
-            {
-              path: "send-email-confirm-contact", element:
-                <ProtectedRoute><SendEmailPage /></ProtectedRoute>
-            }
-          ]
+          element: <ProtectedRoute><ContactRequestIndex /></ProtectedRoute>
         },
         {
           path: "/admin/post-limit",

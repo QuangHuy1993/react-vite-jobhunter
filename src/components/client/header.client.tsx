@@ -1,4 +1,4 @@
-import { callFetchAllSkill, callGetCurrentUser, callLogout } from '@/config/api';
+import { callCheckHrStatus, callFetchAllSkill, callGetCurrentUser, callLogout } from '@/config/api';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setLogoutAction } from '@/redux/slice/accountSlide';
 import styles from '@/styles/client.module.scss';
@@ -20,6 +20,7 @@ import { isMobile } from 'react-device-detect';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import logoImage from '../../assets/Logooo.png';
+import HrActivationPopup from './HrActivationPopup';
 import ManageAccount from './modal/manage.account';
 
 
@@ -40,6 +41,8 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
     const location = useLocation();
     const [currentUser, setCurrentUser] = useState<IUser | null>(null);
     const [skills, setSkills] = useState<ISkill[]>([]);
+    const [showHrActivationPopup, setShowHrActivationPopup] = useState<boolean>(false);
+    const [hrStatus, setHrStatus] = useState<{ isHrRole: boolean, isHrActivated: boolean } | null>(null);
 
     const handleManageAccount = () => {
         setOpenManageAccount(false); // Đóng modal nếu đang mở
@@ -60,6 +63,39 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
 
         fetchCurrentUser();
     }, []);
+
+    useEffect(() => {
+        const checkHrStatus = async () => {
+            if (isAuthenticated && user?.role?.name === 'HR') {
+                try {
+                    const res = await callCheckHrStatus();
+                    if (res.data) {
+                        setHrStatus({
+                            isHrRole: Boolean(res.data.isHrRole),
+                            isHrActivated: Boolean(res.data.isHrActivated)
+                        });
+
+                        // Hiển thị popup nếu là HR chưa kích hoạt
+                        if (res.data.isHrRole && !res.data.isHrActivated) {
+                            setShowHrActivationPopup(true);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error checking HR status:", error);
+                }
+            }
+        };
+
+        checkHrStatus();
+    }, [isAuthenticated, user?.role?.name]);
+
+    // Xử lý kích hoạt thành công
+    const handleActivationSuccess = () => {
+        setShowHrActivationPopup(false);
+        // Cập nhật trạng thái HR đã kích hoạt
+        setHrStatus(prev => prev ? { ...prev, isHrActivated: true } : null);
+
+    };
 
     useEffect(() => {
         // Chỉ lấy path gốc, không bao gồm các path con
@@ -347,6 +383,14 @@ const Header = ({ searchTerm, setSearchTerm }: HeaderProps) => {
             <ManageAccount
                 open={openMangeAccount}
                 onClose={setOpenManageAccount}
+            />
+
+            <HrActivationPopup
+                isVisible={showHrActivationPopup}
+                onClose={() => setShowHrActivationPopup(false)}
+                onSuccess={handleActivationSuccess}
+                userName={currentUser?.name || user?.name}
+                userEmail={currentUser?.email || user?.email || ''}
             />
         </>
     );
