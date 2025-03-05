@@ -1,0 +1,321 @@
+.container {
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.containerActive {
+    opacity: 1;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+    background: linear-gradient(135deg, #4355db, #1677ff);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    // Animation
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: slideDown 0.5s ease forwards;
+    animation-delay: 0.2s;
+
+    h1 {
+        font-size: 24px;
+        color: white;
+        font-weight: 600;
+        margin: 0;
+    }
+}
+
+.title {
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+    animation-delay: 0.4s;
+}
+
+.tableWrapper {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.6s ease-out forwards;
+    animation-delay: 0.3s;
+}
+
+.addButton {
+    animation: pulse 2s infinite;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        animation: none;
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(22, 119, 255, 0.4);
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+.loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    animation: rotate 2s linear infinite;
+
+    div {
+        position: absolute;
+        width: 60%;
+        height: 60%;
+        border-radius: 50%;
+        border: 6px solid #1677ff;
+        border-top-color: transparent;
+        animation: spin 1.2s linear infinite;
+    }
+
+    div:nth-child(1) {
+        animation-delay: -0.45s;
+    }
+
+    div:nth-child(2) {
+        animation-delay: -0.3s;
+        width: 45%;
+        height: 45%;
+    }
+
+    div:nth-child(3) {
+        animation-delay: -0.15s;
+        width: 30%;
+        height: 30%;
+    }
+
+    div:nth-child(4) {
+        width: 15%;
+        height: 15%;
+    }
+}
+
+// Overrides for Ant Design components
+:global {
+    .ant-pro-table {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .ant-pro-card {
+        box-shadow: none !important;
+    }
+
+    .ant-table-wrapper {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .ant-btn-primary {
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(22, 119, 255, 0.4);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+
+    // Table row animations
+    .ant-table-tbody > tr {
+        opacity: 0;
+        animation: fadeInRow 0.5s ease forwards;
+    }
+
+    @for $i from 1 through 20 {
+        .ant-table-tbody > tr:nth-child(#{$i}) {
+            animation-delay: #{0.2 + $i * 0.05}s;
+        }
+    }
+
+    .ant-table-row:hover > td {
+        background-color: rgba(22, 119, 255, 0.05) !important;
+    }
+
+    .ant-pagination {
+        opacity: 0;
+        animation: fadeIn 0.8s ease forwards;
+        animation-delay: 0.6s;
+    }
+
+    .ant-popconfirm {
+        animation: fadeIn 0.3s ease;
+    }
+
+    // Add animation to action icons
+    .anticon-edit,
+    .anticon-delete {
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: scale(1.2);
+        }
+    }
+
+    // Modal animations
+    .ant-modal-mask {
+        animation: fadeIn 0.3s ease;
+    }
+
+    .ant-modal-wrap .ant-modal {
+        animation: modalSlideUp 0.3s ease;
+    }
+
+    .ant-modal-body form .ant-form-item {
+        opacity: 0;
+        transform: translateX(-20px);
+        animation: slideRight 0.5s ease forwards;
+    }
+
+    .ant-modal-body form .ant-form-item:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .ant-modal-body form .ant-form-item:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .ant-modal-body form .ant-form-item:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .ant-modal-body form .ant-form-item:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+}
+
+// Keyframes for animations
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInRow {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(22, 119, 255, 0.4);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 10px rgba(22, 119, 255, 0.6);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(22, 119, 255, 0.4);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+    }
+}

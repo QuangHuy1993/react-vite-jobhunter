@@ -1,9 +1,12 @@
+import paypalLogo from '@/assets/paypal_logo.png';
+import vnpayLogo from '@/assets/vnpay_logo.jpg';
 import styles from '@/styles/donate.module.scss';
 import { IPostLimit } from '@/types/backend';
-import { CrownOutlined } from '@ant-design/icons';
-import { Divider, Modal, Select } from 'antd';
+import { CheckCircleFilled, CrownOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Button, Divider, Modal, Tooltip } from 'antd';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 interface VIPPaymentModalProps {
     isVisible: boolean;
@@ -26,8 +29,15 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
     onCancel
 }) => {
     const [selectedMonths, setSelectedMonths] = useState(1);
+    const [paymentMethod, setPaymentMethod] = useState('vnpay');
 
-    const monthOptions = [
+    interface MonthOption {
+        value: number;
+        label: string;
+        discount?: number;
+    }
+
+    const monthOptions: MonthOption[] = [
         { value: 1, label: '1 tháng' },
         { value: 3, label: '3 tháng', discount: 5 },
         { value: 6, label: '6 tháng', discount: 10 },
@@ -45,6 +55,10 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
 
     const handleConfirm = () => {
         if (!selectedPlan) return;
+        if (paymentMethod === 'paypal') {
+            toast.warning("Chức năng đang bảo trì, Vui lòng quay lại sau");
+            return;
+        }
         const totalPrice = calculateTotalPrice();
         onConfirm({
             planId: selectedPlan.id,
@@ -54,6 +68,13 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
         });
     };
 
+
+    const handlePaymentMethodChange = (value: string) => {
+        if (value === 'paypal') {
+            toast.warning("Chức năng đang bảo trì, Vui lòng quay lại sau");
+        }
+        setPaymentMethod(value);
+    };
     if (!selectedPlan) return null;
 
     const totalPrice = calculateTotalPrice();
@@ -75,19 +96,10 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
                 </div>
             }
             open={isVisible}
-            onOk={handleConfirm}
+            footer={null}
             onCancel={onCancel}
-            confirmLoading={loading}
-            okText="Xác nhận thanh toán"
-            cancelText="Hủy"
-            width={500}
+            width={700}
             className={styles.vipModal}
-            okButtonProps={{
-                style: {
-                    backgroundColor: '#991B1B',
-                    borderColor: '#991B1B'
-                }
-            }}
         >
             <AnimatePresence>
                 {isVisible && (
@@ -98,7 +110,7 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
                     >
-                        <div className={styles.planInfo}>
+                        <div className={styles.planInfoHeader}>
                             <motion.h3
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -112,70 +124,154 @@ const VIPPaymentModal: React.FC<VIPPaymentModalProps> = ({
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.2 }}
                             >
-                                Số bài đăng: {selectedPlan.maxPostsPerMonth} bài/tháng
+                                Số bài đăng: <strong>{selectedPlan.maxPostsPerMonth} bài/tháng</strong>
                             </motion.p>
                         </div>
 
                         <Divider style={{ margin: '16px 0' }} />
 
-                        <div className={styles.monthSelection}>
-                            <span>Thời hạn:</span>
-                            <Select
-                                defaultValue={1}
-                                style={{ width: 280 }}
-                                onChange={setSelectedMonths}
-                                options={monthOptions.map(option => ({
-                                    value: option.value,
-                                    label: `${option.label}${option.discount ? ` (Giảm ${option.discount}%)` : ''}`
-                                }))}
-                            />
+                        <div className={styles.paymentLayout}>
+                            {/* Cột bên trái: Thông tin gói và phương thức thanh toán */}
+                            <div className={styles.leftColumn}>
+                                <div className={styles.sectionTitle}>
+                                    <span>Thời Hạn Đăng Ký</span>
+                                </div>
+
+                                <div className={styles.monthSelectionContainer}>
+                                    {monthOptions.map(option => (
+                                        <div
+                                            key={option.value}
+                                            className={`${styles.monthOption} ${selectedMonths === option.value ? styles.selectedMonth : ''}`}
+                                            onClick={() => setSelectedMonths(option.value)}
+                                        >
+                                            <div className={styles.monthLabel}>
+                                                {option.label}
+                                                {option.discount && option.discount > 0 && (
+                                                    <span className={styles.discountBadge}>-{option.discount}%</span>
+                                                )}
+                                            </div>
+                                            {selectedMonths === option.value && (
+                                                <CheckCircleFilled className={styles.checkIcon} />
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className={styles.sectionTitle} style={{ marginTop: '24px' }}>
+                                    <span>Phương Thức Thanh Toán</span>
+                                </div>
+
+                                <div className={styles.paymentMethods}>
+                                    <motion.div
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        className={`${styles.paymentMethodOption} ${paymentMethod === 'vnpay' ? styles.selectedPaymentMethod : ''}`}
+                                        onClick={() => setPaymentMethod('vnpay')}
+                                    >
+                                        <div className={styles.paymentMethod}>
+                                            <div className={styles.paymentLogo}>
+                                                <img src={vnpayLogo} alt="VNPAY" />
+                                            </div>
+                                            <div className={styles.paymentInfo}>
+                                                <h4>VNPAY</h4>
+                                                <p>Thanh toán trực tuyến qua VNPAY</p>
+                                            </div>
+                                            {paymentMethod === 'vnpay' && (
+                                                <CheckCircleFilled className={styles.selectedPayment} />
+                                            )}
+                                        </div>
+                                    </motion.div>
+
+                                    <Tooltip title="Chức năng đang bảo trì, Vui lòng quay lại sau">
+                                        <motion.div
+                                            whileHover={{ scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            className={`${styles.paymentMethodOption} ${paymentMethod === 'paypal' ? styles.selectedPaymentMethod : ''}`}
+                                            onClick={() => handlePaymentMethodChange('paypal')}
+                                        >
+                                            <div className={styles.paymentMethod}>
+                                                <div className={styles.paymentLogo}>
+                                                    <img src={paypalLogo} alt="PayPal" />
+                                                </div>
+                                                <div className={styles.paymentInfo}>
+                                                    <h4>PayPal</h4>
+                                                    <p>Thanh toán quốc tế qua PayPal</p>
+                                                    <span className={styles.maintenanceBadge}>Đang bảo trì</span>
+                                                </div>
+                                                {paymentMethod === 'paypal' && (
+                                                    <CheckCircleFilled className={styles.selectedPayment} />
+                                                )}
+                                            </div>
+                                        </motion.div>
+                                    </Tooltip>
+                                </div>
+                            </div>
+
+                            {/* Cột bên phải: Chi tiết thanh toán */}
+                            <div className={styles.rightColumn}>
+                                <div className={styles.orderSummary}>
+                                    <h4>Chi Tiết Thanh Toán</h4>
+
+                                    <div className={styles.summaryRow}>
+                                        <span>Gói:</span>
+                                        <span>{selectedPlan.planName}</span>
+                                    </div>
+
+                                    <div className={styles.summaryRow}>
+                                        <span>Giá gói/tháng:</span>
+                                        <span>{selectedPlan.price.toLocaleString('vi-VN')} VNĐ</span>
+                                    </div>
+
+                                    <div className={styles.summaryRow}>
+                                        <span>Thời hạn:</span>
+                                        <span>{selectedMonths} tháng</span>
+                                    </div>
+
+                                    {discount > 0 && (
+                                        <>
+                                            <div className={styles.summaryRow}>
+                                                <span>Tạm tính:</span>
+                                                <span>{originalPrice.toLocaleString('vi-VN')} VNĐ</span>
+                                            </div>
+                                            <div className={`${styles.summaryRow} ${styles.discountRow}`}>
+                                                <span>Giảm giá:</span>
+                                                <span>-{discount}% ({(originalPrice * discount / 100).toLocaleString('vi-VN')} VNĐ)</span>
+                                            </div>
+                                        </>
+                                    )}
+
+                                    <Divider style={{ margin: '12px 0' }} />
+
+                                    <div className={styles.totalRow}>
+                                        <span>Tổng tiền:</span>
+                                        <span>{totalPrice.toLocaleString('vi-VN')} VNĐ</span>
+                                    </div>
+
+                                    <div className={styles.paymentNote}>
+                                        <InfoCircleOutlined /> Bằng việc tiếp tục, bạn đồng ý với các điều khoản của chúng tôi
+                                    </div>
+
+                                    <Button
+                                        type="primary"
+                                        size="large"
+                                        loading={loading}
+                                        onClick={handleConfirm}
+                                        disabled={paymentMethod === 'paypal'}
+                                        className={styles.confirmButton}
+                                    >
+                                        Xác nhận thanh toán
+                                    </Button>
+
+                                    <Button
+                                        type="text"
+                                        onClick={onCancel}
+                                        className={styles.cancelButton}
+                                    >
+                                        Hủy
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
-
-                        <motion.div
-                            className={styles.priceBreakdown}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.3 }}
-                        >
-                            <div className={styles.priceRow}>
-                                <span>Giá gói/tháng:</span>
-                                <span>{selectedPlan.price.toLocaleString('vi-VN')} VNĐ</span>
-                            </div>
-
-                            <div className={styles.priceRow}>
-                                <span>Thời hạn:</span>
-                                <span>{selectedMonths} tháng</span>
-                            </div>
-
-                            {discount > 0 && (
-                                <motion.div
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: 'auto' }}
-                                    transition={{ duration: 0.2 }}
-                                >
-                                    <div className={styles.priceRow}>
-                                        <span>Tạm tính:</span>
-                                        <span>{originalPrice.toLocaleString('vi-VN')} VNĐ</span>
-                                    </div>
-                                    <div className={`${styles.priceRow} ${styles.discount}`}>
-                                        <span>Giảm giá:</span>
-                                        <span>-{discount}%</span>
-                                    </div>
-                                </motion.div>
-                            )}
-
-                            <Divider style={{ margin: '12px 0' }} />
-
-                            <motion.div
-                                className={styles.totalPrice}
-                                initial={{ scale: 0.95 }}
-                                animate={{ scale: 1 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <span>Tổng tiền:</span>
-                                <span>{totalPrice.toLocaleString('vi-VN')} VNĐ</span>
-                            </motion.div>
-                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>

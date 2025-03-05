@@ -1,8 +1,7 @@
-import { Modal, Form, Input, InputNumber, message, notification } from 'antd';
-import { useState, useEffect } from 'react';
-import { IPostLimit } from '@/types/backend';
-import { useAppDispatch } from '@/redux/hooks';
 import { callCreatePostLimit, callUpdatePostLimit } from '@/config/api';
+import { IPostLimit } from '@/types/backend';
+import { Form, Input, InputNumber, message, Modal, notification } from 'antd';
+import { useEffect, useState } from 'react';
 
 interface IProps {
     openModal: boolean;
@@ -20,7 +19,7 @@ const ModalPostLimit = (props: IProps) => {
     useEffect(() => {
         if (dataInit) {
             form.setFieldsValue({
-                planName : dataInit.planName,
+                planName: dataInit.planName,
                 maxPostsPerMonth: dataInit.maxPostsPerMonth,
                 price: dataInit.price,
                 description: dataInit.description,
